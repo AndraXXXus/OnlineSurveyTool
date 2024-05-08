@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Survey\Survey;
 use App\Models\Survey\Question;
 use App\Models\Survey\Option;
+use App\Models\Team\Team;
 use Illuminate\Support\Facades\Session;
 use Ramsey\Uuid\Uuid;
 use App\Http\Requests\CreateOrUpdateSurveyRequest;
@@ -51,6 +52,9 @@ class SurveyController extends Controller
         $data['deleted_at'] = null;
         $data['user_id'] = Auth::id();
         $data['cover_image_path'] = null;
+
+        $team = Team::findOrFail($data['team_id']);
+        $this->authorize('userIsTeamMember', $team);
 
         $survey = Survey::create($data);
 
@@ -101,6 +105,9 @@ class SurveyController extends Controller
         $survey->survey_title =  $request->input('survey_title');
         $survey->survey_description = $request->input('survey_description');
         $survey->deleted_at = null;
+
+        $team = Team::findOrFail($survey->team_id);
+        $this->authorize('userIsTeamMember', $team);
 
         $survey->save();
 

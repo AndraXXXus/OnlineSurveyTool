@@ -42,13 +42,12 @@ class TeamUserController extends Controller
     }
 
     public function cancel_invitation(Team $team, String $user){
+        $user = User::findOrFail($user);
+
         if($team===null){
             return redirect()->back()->with('warning', "Team has been delelted");
         }
         $this->authorize('isUserTeamLeader', $team);
-
-        $user = User::findOrFail($user);
-
 
         if(!($team->invitations->pluck('id')->contains($user->id))){
             redirect()->back()->with('warning', "User has not yet been invited");
@@ -110,7 +109,7 @@ class TeamUserController extends Controller
 
         //Team Leader can't leave
         if($team->user_id === $user->id){
-            return abort(403);
+            redirect()->back()->with('danger', 'Team leader cannot leave the team');
         }
 
         $user->surveys()->withTrashed()->where('team_id', $team->id)->each (function  (Survey $survey) use($team) {

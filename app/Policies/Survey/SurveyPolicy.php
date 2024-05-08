@@ -28,7 +28,8 @@ class SurveyPolicy
         return $survey->team->members->pluck('id')->contains($user->id);
     }
     public function surveyAndUserMatch(User $user, Survey $survey){
-        return ($this->isLeagalSurvey($user, $survey) && $survey->user_id === $user->id);
+        // dd(1);
+        return ($this->isLeagalSurvey($user, $survey) && $survey->user_id === $user->id && $this->surveyTeamAndUserMatch($user, $survey));
     }
 
 
