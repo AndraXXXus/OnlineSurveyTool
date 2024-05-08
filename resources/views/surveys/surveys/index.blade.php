@@ -62,7 +62,7 @@
                         $surveys = isset($archive) ? $team->unpublished_surveys()->onlyTrashed()->get() : $team->unpublished_surveys;
                     @endphp
 
-                    @forelse ($surveys->sortByDesc('updated_at') as $survey)
+                    @forelse ($surveys->sortByDesc('updated_at')->where('user_id',Auth::id()) as $survey)
 
                         @include('surveys.surveys.partials.cards.card')
                     @empty
