@@ -19,7 +19,6 @@
                 <div class="p-3 m-3 text-end">
                     <h1>{{$user->name}}</h1>
                     <p>{{$user->email}}</p>
-                    <p>{{$user->id}}</p>
                 </div>
             </div>
         </div>

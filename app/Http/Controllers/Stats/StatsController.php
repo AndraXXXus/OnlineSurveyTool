@@ -31,7 +31,7 @@ class StatsController extends Controller
         ->groupBy('answers.question_id','questions.question_position')
         ->orderBy('questions.question_position', 'asc')
         ->get();
-
+        // dd($answersCount->pluck('responder_count'));
         $answerTextCountPerQuestion = Answer::where('answers.survey_id',$survey->id)
         ->join('questions', 'answers.question_id', '=', 'questions.id')
         ->select('answers.question_id', 'answers.answer_text','questions.question_position', DB::raw('COUNT(*) as count'))
@@ -68,7 +68,7 @@ class StatsController extends Controller
 
         if(env('DB_CONNECTION') == 'sqlite'){
             $data_duration = Answer::where('answers.survey_id',$survey->id)
-            ->select('responder_id',DB::raw('(strftime("%s", MAX(created_at)) - strftime("%s", MIN(created_at))) AS time_difference_minutes'))
+            ->select('responder_id',DB::raw('(strftime("%s", MAX(updated_at)) - strftime("%s", MIN(question_started_at))) AS time_difference_minutes'))
             ->groupBy('responder_id')
             ->pluck('time_difference_minutes')->countBy(function($value) {
                 return $value / 60;
@@ -77,7 +77,7 @@ class StatsController extends Controller
 
         if(env('DB_CONNECTION') == 'pgsql'){
             $data_duration = Answer::where('answers.survey_id',$survey->id)
-            ->select('responder_id', DB::raw('EXTRACT(EPOCH FROM MAX(created_at)) - EXTRACT(EPOCH FROM MIN(created_at)) AS time_difference_minutes'))
+            ->select('responder_id', DB::raw('EXTRACT(EPOCH FROM MAX(updated_at)) - EXTRACT(EPOCH FROM MIN(question_started_at)) AS time_difference_minutes'))
             ->groupBy('responder_id')
             ->pluck('time_difference_minutes')->countBy(function($value) {
                 return $value/60;
@@ -168,43 +168,6 @@ class StatsController extends Controller
 
         return response()->stream($callback, 200, $headers);
     }
-
-    public function download_clusters(Request $request, Survey $survey){
-
-        dd($request);
-        if($survey === null || $survey->id === null ||Auth::user()->id!=$survey->user->id){
-            return abort(403);
-        }
-        // $request->;
-        $headers = [
-                'Cache-Control'       => 'must-revalidate, post-check=0, pre-check=0'
-            ,   'Content-type'        => 'text/csv'
-            ,   'Content-Disposition' => 'attachment; filename=export_answers_' . $survey->id . '.csv'
-            ,   'Expires'             => '0'
-            ,   'Pragma'              => 'public'
-        ];
-
-        $answers = Answer::where('answers.survey_id', $survey->id)
-        ->join('questions', 'answers.question_id', '=', 'questions.id')
-        ->join('surveys', 'answers.survey_id', '=', 'surveys.id')
-        ->get();
-
-        $answers_list =  $answers->toArray();
-
-        array_unshift($answers_list, array_keys($answers_list[0]));
-
-        $callback = function() use ($answers_list){
-            $FH = fopen('php://output', 'w');
-            foreach ($answers_list as $row) {
-                fputcsv($FH, $row);
-            }
-            fclose($FH);
-        };
-
-        return response()->stream($callback, 200, $headers);
-    }
-
-
 
 }
 

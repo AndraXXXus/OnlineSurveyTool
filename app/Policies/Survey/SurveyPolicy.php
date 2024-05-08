@@ -16,7 +16,7 @@ class SurveyPolicy
     //     //
     // }
 
-    public function isLeagalSurvey(User $user, Survey $survey){
+    public function isLeagalUnpublishedSurvey(User $user, Survey $survey){
         return ($survey != null && $survey->questionnaire_id === null);
     }
     public function isLeagalQuestionnaire(User $user, Survey $survey){
@@ -28,8 +28,7 @@ class SurveyPolicy
         return $survey->team->members->pluck('id')->contains($user->id);
     }
     public function surveyAndUserMatch(User $user, Survey $survey){
-        // dd(1);
-        return ($this->isLeagalSurvey($user, $survey) && $survey->user_id === $user->id && $this->surveyTeamAndUserMatch($user, $survey));
+        return ($this->isLeagalUnpublishedSurvey($user, $survey) && $survey->user_id === $user->id && $this->surveyTeamAndUserMatch($user, $survey));
     }
 
 

@@ -26,7 +26,7 @@
     <body>
         <div id="app">
 
-            @include('layouts.nav.nav-bar')
+            @include('layouts.nav.guest-nav-bar')
             <div class="container">
                 <main class="py-5">
                     @yield('content')

@@ -22,8 +22,7 @@
             <div class="d-flex justify-content-end gap-3">
                 <div class="p-3 m-3 text-end">
                     <h1>{{$user->name}}</h1>
-                    <p>E-mail Address: {{$user->email}}</p>
-                    <p>User ID: {{$user->id}}</p>
+                    <p>{{$user->email}}</p>
                 </div>
             </div>
         </div>

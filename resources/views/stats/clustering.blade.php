@@ -7,34 +7,36 @@
 
     <h1 class="font-bold my-4 text-4xl text-center"> Clustering </h1>
 
-    {{-- <form method="POST" action="{{ route('stats.download_clusters') }}">
-        @csrf
-        <input type="hidden" name="cluster_indexes" id="cluster_indexes" value="">
-        <input type="hidden" name="responderIds" id="responder_Ids" value="">
-        <button type="submit">Submit</button>
-    </form> --}}
+
 
     <hr>
-    <select id = "select_choices" title='select cluster number'>
-    </select>
-    <select id = "select_linkage" title='select cluster linkage'>
-        <option value="single">Single</option>
-        <option value="complete">Complete</option>
-    </select>
+    <div class="row">
+        <div class="d-flex justify-content-between gap-3">
+            <div class="d-flex justify-content-between gap-3">
+                <select id = "select_cluster_choices" title='select cluster number'>
+                </select>
+                <select id = "select_linkage" title='select cluster linkage'>
+                    <option value="single">Single</option>
+                    <option value="complete">Complete</option>
+                </select>
+            </div >
+            <button class="btn btn-primary" onclick="downloadCSV()"><i class="fa-solid fa-download"></i> Download Cluser IDs</button>
+        </div >
 
+    </div >
     <div class="container">
+        <div class="d-flex flex-wrap items-center  justify-content-center gap-2 p-3">
+            <div class="card">
+                <div class="card-body">
+                    <svg id="svg" height="1000" width="1000"></svg>
+                </div>
+            </div>
 
+        </div>
 
 
     </div >
-    <div class="d-flex flex-wrap items-center  justify-content-center gap-2 p-3">
-        <div class="card">
-            <div class="card-body">
-                <svg id="svg" height="1000" width="1000"></svg>
-            </div>
-        </div>
 
-    </div>
 
 </div>
 @endsection
@@ -53,7 +55,7 @@
 
         const select_linkage = document.getElementById("select_linkage");
 
-        select = document.getElementById('select_choices');
+        select = document.getElementById('select_cluster_choices');
         select.value = 0 ;
         select_linkage.addEventListener("change", changeLinkage);
         changeLinkage();
@@ -71,14 +73,16 @@
             uniqu_dist_values = [...new Set(nodes.map(node => Number(node['dist'])))];
 
             uniqu_dist_values = uniqu_dist_values.sort(function (a, b) { return a - b; });
+
             max = d3.max(uniqu_dist_values);
 
             while (select.firstChild) {
                 select.removeChild(select.lastChild);
+
             }
 
             for (var i = 0; i<uniqu_dist_values.length; i++){
-                var opt = document.createElement('choice');
+                var opt = document.createElement('option');
                 opt.value = uniqu_dist_values[i];
                 opt.innerHTML = uniqu_dist_values.length-i;
                 select.appendChild(opt);
@@ -233,9 +237,40 @@
 
             const yAxis = d3.axisLeft(y);
             svg.append(yAxis(axisG));
-
+            console.log("original respIDs: "+@js($responderIds));
             console.log("global_C_indexes: "+global_C_indexes);
         }
 
     });
+
+    function get_responderIds_with_clsuter_ids(){
+            let responderIds_with_clsuters = {};
+            for (var i = 0; i<global_C_indexes.length; i++){
+                responderIds_with_clsuters[@js($responderIds)[i]] = global_C_indexes[i];
+            }
+            return responderIds_with_clsuters;
+        }
+
+        function convertToCSV(obj) {
+            const rows = [];
+            rows.push(`responder_id,cluster_index`);
+            for (const key in obj) {
+                if (Object.hasOwnProperty.call(obj, key)) {
+                    rows.push(`${key},${obj[key]}`);
+                }
+            }
+            return rows.join('\n');
+        }
+
+        function downloadCSV() {
+            const data = get_responderIds_with_clsuter_ids();
+
+            const csvContent = 'data:text/csv;charset=utf-8,' + convertToCSV(data);
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement('a');
+            link.setAttribute('href', encodedUri);
+            link.setAttribute('download', 'data.csv');
+            document.body.appendChild(link);
+            link.click();
+        }
 </script>
