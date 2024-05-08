@@ -71,6 +71,7 @@
                             {{ isset($archive) ? 'No archived surveys yet!' : 'No surveys yet!' }}
                         </div>
                     </div>
+
                 @endforelse
                 @empty
                     <div class="col-12">

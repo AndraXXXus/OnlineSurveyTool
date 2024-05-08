@@ -2,10 +2,6 @@
     <p class="text-center">
         <small class="text-muted"> <i class="far fa-calendar-alt"></i> {{ $survey->updated_at }}</small>
     </p>
-    <p class="text-center">
-        <small class="text-muted">
-        {{$survey->team->team_name}}</small>
-    </p>
 </p>
 <hr>
 @if(isset($archive))
