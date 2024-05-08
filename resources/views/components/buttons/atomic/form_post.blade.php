@@ -1,0 +1,18 @@
+@props(['button_id' ,'route','title', 'class', 'text','icon'])
+
+<form id={{ $button_id }} method="POST" action="{{ $route }}">
+    @csrf
+    <a
+        title="{{$title}}"
+        class = "{{$class}}"
+        href="{{ $route }}"
+        onclick="event.preventDefault();
+        document.getElementById('{{$button_id}}').submit();"
+    >
+
+        <i class="{{$icon}}"></i>
+
+        {{$text}}
+
+    </a>
+</form>

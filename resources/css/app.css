@@ -1,0 +1,50 @@
+#darkModeSwitcher:checked {
+    background-position: right center;
+
+    background-color: rgb(13, 110, 253);
+
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='orange'/%3e%3c/svg%3e");
+}
+#darkModeSwitcher {
+    transform: rotate(-90deg);
+    background-color: rgba(0, 0, 255, 0.829);
+    border-color: rgb(13, 110, 253);
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='white'/%3e%3c/svg%3e");
+}
+
+.btn-rebeccapurple {
+    --bs-btn-color: #fff;
+    --bs-btn-bg: rebeccapurple;
+    --bs-btn-border-color: rebeccapurple;
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: #572b82;
+    --bs-btn-hover-border-color: #52297a;
+    --bs-btn-focus-shadow-rgb: 125, 82, 168;
+    --bs-btn-active-color: #fff;
+    --bs-btn-active-bg: #52297a;
+    --bs-btn-active-border-color: #4d2673;
+    --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    --bs-btn-disabled-color: #fff;
+    --bs-btn-disabled-bg: rebeccapurple;
+    --bs-btn-disabled-border-color: rebeccapurple;
+}
+.btn-outline-rebeccapurple {
+    --bs-btn-color: rebeccapurple;
+    --bs-btn-border-color: rebeccapurple;
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: rebeccapurple;
+    --bs-btn-hover-border-color: rebeccapurple;
+    --bs-btn-focus-shadow-rgb: 102, 51, 153;
+    --bs-btn-active-color: #fff;
+    --bs-btn-active-bg: rebeccapurple;
+    --bs-btn-active-border-color: rebeccapurple;
+    --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    --bs-btn-disabled-color: rebeccapurple;
+    --bs-btn-disabled-bg: transparent;
+    --bs-btn-disabled-border-color: rebeccapurple;
+    --bs-gradient: none;
+}
+
+[x-cloak] {
+    display: none !important;
+}

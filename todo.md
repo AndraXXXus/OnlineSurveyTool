@@ -1,0 +1,61 @@
+-   [ ] backend tests!!!! -> controller endpointok
+-   [ ] Readme.md!!
+-   [ ] factroy 4 answers!!
+
+-   [ 99% ✓] Hierarchical
+-   [✓] profile: controller blade, pending, user details/password change, delete user
+-   [✓] Team: controller blade, kick, create new team, invite new team member, edit team name, team delete, give ownership of another member
+-   [✓] questionarrie gombok, forcedlete modal
+-   [✓] email new password!!!!!!!!!!, no email!
+-   [✓] no-js comptibilty = no darkmode
+-   [✓] session lenght dia
+-   [✓] Stats
+-   [✓] youtube video valid validator server & client side
+-   [✓] video req, full watch, endable when video ended and chioce picked
+-   [✓] questionarrie store!!!!!!
+-   [✓] stats szebb és nem tölt be a fő oszlopia
+-   [✓] disabled submit 4 questio requered!!!
+-   [✓] opens new window to fill out survey
+-   [✓] táblázatba szedés
+-   [✓] force delete-> modal megerősítés
+-   [✓] question,oprtuin create/edit back to list button
+-   [✓] tipusos quesation/choice megjelenítés
+-   [✓] kitöltés front end reform
+-   [✓] questionarrie realod if already picked choice(s)
+-   [✓] question_id in seesion instead of sending it "in url"
+-   [✓] all buttons -> components generalize
+-   [✓] export filled questionnaires
+-   [✓] kép
+-   [✓] video
+-   [✓] question requered kivezettés, save
+-   [✓] forcedelete ??
+-   [✓] kitöltés naptár freq
+-   [✓] kisebb kördiá?
+-   [✓] question,choice rendezés
+-   [✓] session added sucsssfully bugs!!!
+-   [✓] szebb frontend!!!
+-   [✓] list selecet from vailidation kivezetés
+-   [✓] deploy 2 Render.com (sqlite)
+-   [✓] pgsql on render.com
+-   [✓] questionarri kettéválasztás 2 controllerre -> 3 lett, maradhat
+-   [✓] 419
+
+-   [ ] answers szétszedés
+-   [ ] prevent login when already logged in (from other device)
+-   [ ] add edit, delete to question,choice show
+-   [ ] js darkmode
+-   [ ] állapottartó modal create-re, edit-re
+-   [ ] x-data-show questions->choices table
+-   [ ] logic?! prerequisite = hard_pre_req vs if, loop
+-   [ ] kitöltések megtekintése
+-   [ ] toastr: https://github.com/yoeunes/toastr
+-   [ ] mass delete selected (arhcive, survey,question, choice, empty archive)
+-   [ ] dynamic serach in surveys/ questionnaires
+
+-   [-] Broadcast events
+-   [-] dia resposive & clikc-> zoom
+-   [-] clone után boarder villog
+-   [-] report generálás
+-   [-] LiveWire
+-   [-] selected id modified + send + validation error -> NOT disabled submit!!
+-   [-] surevey x questionarrie kettéválasztás DB-n
