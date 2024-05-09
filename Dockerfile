@@ -16,13 +16,8 @@ ENV LOG_CHANNEL stderr
 
 # Allow composer to run as root
 ENV COMPOSER_ALLOW_SUPERUSER 1
-RUN echo "Running composer"
-RUN composer install --no-dev --working-dir=/var/www/html
 
-RUN echo "Running npm"
 RUN apk add --update nodejs npm
-RUN npm i
-RUN npm run build
 
 CMD ["/start.sh"]
 # FROM richarvey/nginx-php-fpm:3.1.6
