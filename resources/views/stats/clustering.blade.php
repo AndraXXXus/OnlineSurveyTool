@@ -10,7 +10,9 @@
 
 
     <hr>
+    @if(count($responderIds) > 1)
     <div class="row">
+
         <div class="d-flex justify-content-between gap-3">
             <div class="d-flex justify-content-between gap-3">
                 <select id = "select_cluster_choices" title='select cluster number'>
@@ -37,7 +39,9 @@
 
     </div >
 
-
+    @else
+    Need at least 2 responder to be able to segment them.
+    @endif
 </div>
 @endsection
 
