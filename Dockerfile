@@ -3,7 +3,7 @@ FROM richarvey/nginx-php-fpm:3.1.6
 COPY . .
 
 # Image config
-ENV SKIP_COMPOSER 0
+ENV SKIP_COMPOSER 1
 ENV WEBROOT /var/www/html/public
 ENV PHP_ERRORS_STDERR 1
 ENV RUN_SCRIPTS 1
@@ -22,22 +22,11 @@ RUN apk add --update nodejs npm
 # Install composer
 RUN composer install --working-dir=/var/www/html
 
-# Install NPM dependencies
-RUN npm install
+# # Install NPM dependencies
+# RUN npm install
 
-# Build Vite assets
-RUN npm run build
-
-RUN php artisan config:cache
-
-RUN php artisan route:cache
-
-RUN php artisan migrate --force
-RUN php artisan db:seed --force
-
-
-RUN php artisan storage:link
-
+# # Build Vite assets
+# RUN npm run build
 
 CMD ["/start.sh"]
 # FROM richarvey/nginx-php-fpm:3.1.6
