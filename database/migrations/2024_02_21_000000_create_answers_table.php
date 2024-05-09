@@ -15,10 +15,10 @@ class CreateAnswersTable extends Migration
     {
         Schema::create('answers', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('responder_id');
-            $table->foreignUuid('survey_id')->references('id')->on('surveys')->onDelete('cascade');
-            $table->foreignUuid('question_id')->references('id')->on('questions')->onDelete('cascade');
-            $table->foreignUuid('choice_id')->references('id')->on('choices')->onDelete('cascade');
+            $table->uuid('responder_id')->index();
+            $table->foreignUuid('survey_id')->references('id')->on('surveys')->onDelete('cascade')->index();
+            $table->foreignUuid('question_id')->references('id')->on('questions')->onDelete('cascade')->index();
+            $table->foreignUuid('choice_id')->references('id')->on('choices')->onDelete('cascade')->index();
             $table->string('answer_text',255)->required();
             $table->timestamp('question_started_at')->required();
             $table->timestamps();

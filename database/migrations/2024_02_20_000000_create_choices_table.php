@@ -14,7 +14,7 @@ class CreateChoicesTable extends Migration
     public function up()
     {
         Schema::create('choices', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+            $table->uuid('id')->primary()->index();
             $table->unsignedInteger('choice_position')->nullable();
             $table->string('choice_label',255)->nullable();
             $table->string('choice_text',255)->required();

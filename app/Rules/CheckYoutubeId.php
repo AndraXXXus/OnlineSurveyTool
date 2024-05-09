@@ -39,7 +39,7 @@ class CheckYoutubeId implements ValidationRule
             return false;
         }
 
-        $apiKey = env('YOUTUBE_APP_ID');
+        $apiKey = env('YOUTUBE_APP_KEY');
 
         $client = new Client();
         $client->setDeveloperKey($apiKey);

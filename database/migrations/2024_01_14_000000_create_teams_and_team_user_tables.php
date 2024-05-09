@@ -14,7 +14,7 @@ class CreateTeamsAndTeamUserTables extends Migration
     public function up()
     {
         Schema::create('teams', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+            $table->uuid('id')->primary()->index();
             $table->foreignUuid('user_id')->references('id')->on('users');
             $table->string('team_name', 255)->required();
             $table->timestamps();

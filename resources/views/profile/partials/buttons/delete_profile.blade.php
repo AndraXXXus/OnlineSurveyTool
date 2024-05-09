@@ -3,7 +3,7 @@
     $id = 'delete_profile_' . Auth::id();
 @endphp
 
-<div class="row mt-3 mb-3">
+<div class="row mt-3 mb-3 text-center">
 @if(Auth::User()->teams->count() > 0)
     <a
     title="To Team Management"

@@ -11,9 +11,10 @@
 .env
 .env.example
 .env.backup
+example4rendercom.env
 .phpunit.result.cache
 docker-compose.override.yml
-Homestead.json
+Homestead.jsons
 Homestead.yaml
 npm-debug.log
 yarn-error.log
