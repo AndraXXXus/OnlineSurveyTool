@@ -3,7 +3,7 @@ FROM richarvey/nginx-php-fpm:3.1.6
 COPY . .
 
 # Image config
-ENV SKIP_COMPOSER 1
+ENV SKIP_COMPOSER 0
 ENV WEBROOT /var/www/html/public
 ENV PHP_ERRORS_STDERR 1
 ENV RUN_SCRIPTS 1
@@ -16,6 +16,13 @@ ENV LOG_CHANNEL stderr
 
 # Allow composer to run as root
 ENV COMPOSER_ALLOW_SUPERUSER 1
+RUN echo "Running composer"
+RUN composer install --no-dev --working-dir=/var/www/html
+
+RUN echo "Running npm"
+RUN apk add --update nodejs npm
+RUN npm i
+RUN npm run build
 
 CMD ["/start.sh"]
 # FROM richarvey/nginx-php-fpm:3.1.6
