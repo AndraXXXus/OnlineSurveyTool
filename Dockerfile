@@ -10,36 +10,11 @@ ENV RUN_SCRIPTS 1
 ENV REAL_IP_HEADER 1
 
 # Laravel config
-ENV APP_DEBUG true
+ENV APP_ENV production
+ENV APP_DEBUG false
 ENV LOG_CHANNEL stderr
 
 # Allow composer to run as root
-ENV COMPOSER_ALLOW_SUPERUSER 0
-
-# Install node and npm for Vite
-RUN apk add --update nodejs npm
-
-# # Install NPM dependencies
-RUN npm install
-
-# # Build Vite assets
-RUN npm run build
-
-RUN composer install --working-dir=/var/www/html
+ENV COMPOSER_ALLOW_SUPERUSER 1
 
 CMD ["/start.sh"]
-
-# COPY . .
-
-# RUN apk update
-
-# # Install the `npm` package
-# RUN apk add --no-cache npm
-
-# # Install NPM dependencies
-# RUN npm install
-
-# # Build Vite assets
-# RUN npm run build
-
-# CMD ["/start.sh"]
