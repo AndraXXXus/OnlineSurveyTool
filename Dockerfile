@@ -28,6 +28,17 @@ RUN npm install
 # Build Vite assets
 RUN npm run build
 
+RUN php artisan config:cache
+
+RUN php artisan route:cache
+
+RUN php artisan migrate --force
+RUN php artisan db:seed --force
+
+
+RUN php artisan storage:link
+
+
 CMD ["/start.sh"]
 # FROM richarvey/nginx-php-fpm:3.1.6
 
