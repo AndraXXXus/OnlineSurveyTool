@@ -19,6 +19,14 @@ ENV COMPOSER_ALLOW_SUPERUSER 0
 # Install node and npm for Vite
 RUN apk add --update nodejs npm
 
+# # Install NPM dependencies
+RUN npm install
+
+# # Build Vite assets
+RUN npm run build
+
+RUN composer install --working-dir=/var/www/html
+
 CMD ["/start.sh"]
 
 # COPY . .

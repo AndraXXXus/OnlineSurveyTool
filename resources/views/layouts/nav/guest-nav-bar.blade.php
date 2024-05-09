@@ -14,27 +14,9 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <!-- Left Side Of Navbar -->
-            @auth
-            @include('layouts.nav.partials.main-nav')
-            @endauth
 
 
 
-            <!-- Right Side Of Navbar -->
-            <ul class="navbar-nav ms-auto">
-
-
-
-
-
-                <!-- Authentication Links -->
-                @guest
-                    @include('layouts.nav.partials.guest-nav')
-                @else
-                    @include('layouts.nav.partials.loggedin')
-                @endguest
-
-            </ul>
         </div>
     </div>
 </nav>
