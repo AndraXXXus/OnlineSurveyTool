@@ -19,6 +19,15 @@ ENV COMPOSER_ALLOW_SUPERUSER 1
 
 RUN apk add --update nodejs npm
 
+# Install composer
+RUN composer install --working-dir=/var/www/html
+
+# Install NPM dependencies
+RUN npm install
+
+# Build Vite assets
+RUN npm run build
+
 CMD ["/start.sh"]
 # FROM richarvey/nginx-php-fpm:3.1.6
 
