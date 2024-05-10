@@ -57,9 +57,10 @@ class QuestionController extends Controller
     public function edit(Question $question)
     {
         $survey = $question->survey;
+        $this->authorize('surveyAndUserMatch', $survey);
         $user = $survey->user;
         $user = User::findOrFail(Auth::id());
-        $this->authorize('surveyAndUserMatch', $survey);
+
 
 
         $allowedQuestionTypes = Question::getAllowedQuestionTypes();
@@ -69,8 +70,7 @@ class QuestionController extends Controller
 
     public function store(CreateOrUpdateQuestionRequest $request, Survey $survey)
     {
-        $user = $survey->user;
-        $user = User::findOrFail(Auth::id());
+
         $this->authorize('surveyAndUserMatch', $survey);
 
         $data['question_text'] = $request->input('question_text');
@@ -112,11 +112,10 @@ class QuestionController extends Controller
     public function update(CreateOrUpdateQuestionRequest $request, Question $question)
     {
         $survey = $question->survey;
+        $this->authorize('surveyAndUserMatch', $survey);
         $user = $survey->user;
 
         $user = User::findOrFail(Auth::id());
-        $this->authorize('surveyAndUserMatch', $survey);
-
 
         $question->question_text = $request->input('question_text');
         $question->question_type = $request->input('question_type');
@@ -170,7 +169,7 @@ class QuestionController extends Controller
     public function movequestion(Question $question, String $up_or_down){
 
         $survey = $question->survey;
-        $this->authorize('surveyAndUserMatch', $question->survey);
+        $this->authorize('surveyAndUserMatch', $survey);
 
         $modification = 0;
         if($up_or_down === "up"){
@@ -218,7 +217,7 @@ class QuestionController extends Controller
     {
         $survey = $question->survey;
 
-        $this->authorize('surveyAndUserMatch', $question->survey);
+        $this->authorize('surveyAndUserMatch', $survey);
 
         //$this->authorize('delete', $survey);
 
@@ -248,8 +247,7 @@ class QuestionController extends Controller
     public function restore(String $question){
         $question = Question::onlyTrashed()->findOrFail($question);
         $survey = $question->survey;
-
-        $this->authorize('surveyAndUserMatch', $question->survey);
+        $this->authorize('surveyAndUserMatch', $survey);
 
         $question->restore();
 
@@ -266,8 +264,7 @@ class QuestionController extends Controller
     {
         $question = Question::withTrashed()->findOrFail($question);
         $survey = $question->survey;
-
-        $this->authorize('surveyAndUserMatch', $question->survey);
+        $this->authorize('surveyAndUserMatch', $survey );
 
 
         //$this->authorize('delete', $survey);
@@ -287,8 +284,7 @@ class QuestionController extends Controller
 
     public function clone(Question $question){
         $survey = $question->survey;
-
-        $this->authorize('surveyAndUserMatch', $question->survey);
+        $this->authorize('surveyAndUserMatch', $survey);
 
         $question->deepCopyQuestion($survey);
 

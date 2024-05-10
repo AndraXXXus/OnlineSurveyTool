@@ -54,9 +54,9 @@
                 Choice permanently deleted!
             </div>
         @endif
-        @if (Session::has('youtube_api_error'))
+        @if (Session::has('chioce_restored'))
             <div class="alert alert-danger">
-                Youtube Api Error1: {{Session::get('youtube_api_error')}}
+                Choice successfully restored!
             </div>
         @endif
     </div>

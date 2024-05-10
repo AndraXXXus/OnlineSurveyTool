@@ -81,6 +81,14 @@ class SurveyController extends Controller
     public function update(CreateOrUpdateSurveyRequest $request, Survey $survey)
     {
         $this->authorize('surveyAndUserMatch', $survey);
+        $this->authorize('userIsTeamMember', $survey->team);
+
+        $survey->team_id = $request->input('team_id');
+        $survey->survey_title =  $request->input('survey_title');
+        $survey->survey_description = $request->input('survey_description');
+
+        $team = Team::findOrFail($survey->team_id);
+        $this->authorize('userIsTeamMember', $team);
 
         $cover_image_path = $survey->cover_image_path;
 
@@ -100,15 +108,7 @@ class SurveyController extends Controller
             Storage::disk('public')->delete($survey->cover_image_path);
         }
 
-        $survey->team_id = $request->input('team_id');
         $survey->cover_image_path = $cover_image_path;
-        $survey->survey_title =  $request->input('survey_title');
-        $survey->survey_description = $request->input('survey_description');
-        $survey->deleted_at = null;
-
-        $team = Team::findOrFail($survey->team_id);
-        $this->authorize('userIsTeamMember', $team);
-
         $survey->save();
 
         Session::flash('survey_updated', $survey);
@@ -120,7 +120,7 @@ class SurveyController extends Controller
     public function restore(String $survey)
     {
         $survey = Survey::onlyTrashed()->where('user_id',Auth::id())->findOrFail($survey);
-        
+
         $this->authorize('surveyAndUserMatch', $survey);
 
         $survey->restore();

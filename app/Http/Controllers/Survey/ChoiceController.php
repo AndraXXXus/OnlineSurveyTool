@@ -21,7 +21,10 @@ class ChoiceController extends Controller
 
     public function show(Survey $survey, Question $question)
     {
-        $this->authorize('surveyAndUserMatch', $question->survey);
+        if($question->survey != $survey){
+            return abort(403, "Survey and question do not match");
+        }
+        $this->authorize('surveyAndUserMatch', $survey);
 
         $choices = $question->choices->whereNull('deleted_at')->sortBy('choice_position');
         return view('surveys.choices.show')->with(['survey' => $survey,'question'=>$question ,'choices' => $choices]);
@@ -30,9 +33,8 @@ class ChoiceController extends Controller
     public function archive(Question $question)
     {
         $survey = $question->survey;
+        $this->authorize('surveyAndUserMatch', $survey);
         $choices = $question->choices()->onlyTrashed()->orderBy('deleted_at', 'DESC')->get();
-
-        $this->authorize('surveyAndUserMatch', $question->survey);
 
         $archive = true;
 
@@ -50,7 +52,7 @@ class ChoiceController extends Controller
     {
         $survey = $question->survey;
 
-        $this->authorize('surveyAndUserMatch', $question->survey);
+        $this->authorize('surveyAndUserMatch', $survey);
 
         $data['choice_text'] = $request->input('choice_text');
 
@@ -61,7 +63,7 @@ class ChoiceController extends Controller
 
         $choice = Choice::create($data);
 
-        Session::flash('choice_created', $choice);
+        Session::flash('choice_created');
 
         return redirect()->route('survey.question.show', ['survey' => $survey, 'question' => $question]);
     }
@@ -71,9 +73,7 @@ class ChoiceController extends Controller
         $question = $choice->question;
         $survey = $question->survey;
 
-        $this->authorize('surveyAndUserMatch', $choice->question->survey);
-
-        Session::flash('choice_updated', $choice);
+        $this->authorize('surveyAndUserMatch', $survey);
 
         return view('surveys.choices.create')->with(['choice' => $choice, 'question' => $question, 'survey'  =>  $survey]);
     }
@@ -84,7 +84,7 @@ class ChoiceController extends Controller
         $question = $choice->question;
         $survey = $question->survey;
 
-        $this->authorize('surveyAndUserMatch', $choice->question->survey);
+        $this->authorize('surveyAndUserMatch', $survey);
 
         // if ( $request->delete_image === true ){$data['image'] = null;}
         // else{ $data['image'] = $survey->image; }
@@ -101,7 +101,7 @@ class ChoiceController extends Controller
 
         $choice->save();
 
-        //Session::flash('movie_updated', $choice);
+        Session::flash('choice_updated');
 
         return redirect()->route('survey.question.show', ['survey' => $survey, 'question' => $question]);
     }
@@ -111,7 +111,7 @@ class ChoiceController extends Controller
         $question = $choice->question;
         $survey = $question->survey;
 
-        $this->authorize('surveyAndUserMatch', $choice->question->survey);
+        $this->authorize('surveyAndUserMatch', $survey);
 
 
         //$this->authorize('delete', $survey);
@@ -135,26 +135,26 @@ class ChoiceController extends Controller
 
 
 
-        Session::flash('choice_deleted', $choice);
+        Session::flash('choice_deleted');
         //return redirect()->route('choices.show',['question' => $question]);
         return redirect()->route('survey.question.show', ['survey' => $survey, 'question' => $question]);
     }
 
 
 
-    public function restore(Request $request, String $choice){
+    public function restore(String $choice){
         $choice = Choice::onlyTrashed()->findOrFail($choice);
         $question = $choice->question;
         $survey = $question->survey;
 
-        $this->authorize('surveyAndUserMatch', $choice->question->survey);
+        $this->authorize('surveyAndUserMatch', $survey);
 
 
         $choice->restore();
         $choice->choice_position = $question->choices()->count();
         $choice->save();
 
-        Session::flash('question_restored'.$choice);
+        Session::flash('chioce_restored');
 
         return redirect()->route('survey.question.show', ['survey' => $survey, 'question' => $question]);
     }
@@ -210,17 +210,16 @@ class ChoiceController extends Controller
     public function forcedelete(String $choice)
     {
         $choice = Choice::onlyTrashed()->findOrFail($choice);
+        $this->authorize('surveyAndUserMatch', $choice->question->survey);
         $question = $choice->question;
         $survey = $question->survey;
-
-        $this->authorize('surveyAndUserMatch', $choice->question->survey);
 
         $deleted = $choice->forcedelete();
         if (!$deleted) {
             return abort(500);
         }
 
-        Session::flash('choice_forcedeleted', $choice);
+        Session::flash('choice_forcedeleted');
         return redirect()->route('survey.question.show', ['survey' => $survey, 'question' => $question]);
     }
 

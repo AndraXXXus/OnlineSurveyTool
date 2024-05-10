@@ -27,7 +27,6 @@ class CreateTeamsAndTeamUserTables extends Migration
             $table->foreignUuid('user_id')->references('id')->on('users');
             $table->enum('status', ['pending', 'accepted'])->default('pending');
             $table->primary(['team_id', 'user_id']);
-            $table->softDeletes();
             $table->timestamps();
         });
     }

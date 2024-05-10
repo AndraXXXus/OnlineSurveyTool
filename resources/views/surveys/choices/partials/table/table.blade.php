@@ -10,7 +10,7 @@
         @else
 
         @isset($archive)
-            <table class="table-responsive table-hover table-bordered">
+            <div class="table-responsive table-hover table-bordered">
         @else
             <div class="table-responsive table-bordered">
         @endisset
