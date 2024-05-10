@@ -12,14 +12,12 @@ use Illuminate\Validation\Rule;
 
 class TeamUserController extends Controller
 {
-    // public function index(Team $team)
-    // {
-    // }
+    public function __construct(){
+        $this->middleware('auth');
+    }
+
 
     public function invitation(Request $request, Team $team){
-        if($team===null){
-            return redirect()->back()->with('warning', "Team has been delelted");
-        }
 
         $this->authorize('isUserTeamLeader', $team);
 
@@ -44,9 +42,6 @@ class TeamUserController extends Controller
     public function cancel_invitation(Team $team, String $user){
         $user = User::findOrFail($user);
 
-        if($team===null){
-            return redirect()->back()->with('warning', "Team has been delelted");
-        }
         $this->authorize('isUserTeamLeader', $team);
 
         if(!($team->invitations->pluck('id')->contains($user->id))){
@@ -66,9 +61,6 @@ class TeamUserController extends Controller
     {
         $user = Auth::User();
         $user_id = $user->id;
-        if($team===null){
-            return redirect()->back()->with('warning', "Team has been delelted");
-        }
 
         if( $user->can('invitationBelongsToUser', $team)){
             $team->invitations()->detach($user_id);
@@ -76,7 +68,7 @@ class TeamUserController extends Controller
 
             return redirect()->back()->with('success', 'Team invitation successfully accepted: ' . $team->team_name);
         }else{
-            return redirect()->back()->with('warning', 'Team invitation has been withdrawn: ' . $team->team_name);
+            return redirect()->back()->with('warning', 'Team deleted or invitation has been withdrawn: ' . $team->team_name);
         }
 
     }

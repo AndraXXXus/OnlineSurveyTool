@@ -22,9 +22,13 @@ class TeamController extends Controller
         return view('team.index')->with(['user' => $user]);
     }
 
+    // public function archived()
+    // {
+    //     $user = Auth::user();
+    //     return view('team.archived')->with(['user' => $user]);
+    // }
 
     public function store(Request $request){
-
         $data = $request->validate([
             'team_name' => ['nullable', 'string', 'max:255'],
         ]);
@@ -81,7 +85,7 @@ class TeamController extends Controller
         // }
 
         // $team->members()->detach(Auth::id());
-        // $team->invitations()->detach();
+        $team->invitations()->detach();
 
         $deleted = $team->delete();
         $team->surveys()->withTrashed()->each (function  (Survey $survey){
@@ -93,6 +97,26 @@ class TeamController extends Controller
             return abort(500);
         }
 
-        return redirect()->back()->with('success', "Team: '" . $team->team_name . "' Successfully Deleted!");
+        return redirect()->back()->with('success', "Team: '" . $team->team_name . "' Successfully Archived!");
+    }
+
+    public function forcedelete(Team $team){
+
+        $this->authorize('isUserTeamLeader', $team);
+
+        $team->members()->detach();
+        $team->invitations()->detach();
+
+        $deleted = $team->delete();
+        $team->surveys()->withTrashed()->each (function  (Survey $survey){
+            $survey->forcedelete();
+        });
+
+
+        if (!$deleted) {
+            return abort(500);
+        }
+
+        return redirect()->back()->with('success', "Team: '" . $team->team_name . "' Permanently Deleted!");
     }
 }
