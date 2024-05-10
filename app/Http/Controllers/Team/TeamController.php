@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Validation\Rule;
+use App\Models\Survey\Survey;
 
 class TeamController extends Controller
 {
@@ -72,17 +73,21 @@ class TeamController extends Controller
 
         $this->authorize('isUserTeamLeader', $team);
 
-        if($team->members->count()>1){
-            return redirect()->back()->with('warning', "Team still has members");
-        }
-        if($team->surveys()->withTrashed()->count()>0){
-            return redirect()->back()->with('warning', "Team still has surveys left");
-        }
+        // if($team->members->count()>1){
+        //     return redirect()->back()->with('warning', "Team still has members");
+        // }
+        // if($team->surveys()->withTrashed()->count()>0){
+        //     return redirect()->back()->with('warning', "Team still has surveys left");
+        // }
 
-        $team->members()->detach(Auth::id());
-        $team->invitations()->detach();
+        // $team->members()->detach(Auth::id());
+        // $team->invitations()->detach();
 
         $deleted = $team->delete();
+        $team->surveys()->withTrashed()->each (function  (Survey $survey){
+            $survey->delete();
+        });
+
 
         if (!$deleted) {
             return abort(500);

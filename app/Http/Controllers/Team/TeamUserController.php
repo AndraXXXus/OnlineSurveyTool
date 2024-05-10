@@ -64,12 +64,13 @@ class TeamUserController extends Controller
 
     public function accept(Team $team)
     {
-        $user_id = Auth::id();
+        $user = Auth::User();
+        $user_id = $user->id;
         if($team===null){
             return redirect()->back()->with('warning', "Team has been delelted");
         }
 
-        if( $this->can('invitationBelongsToUser', $team)){
+        if( $user->can('invitationBelongsToUser', $team)){
             $team->invitations()->detach($user_id);
             $team->members()->attach($user_id, ['status' => 'accepted']);
 
@@ -112,7 +113,7 @@ class TeamUserController extends Controller
             redirect()->back()->with('danger', 'Team leader cannot leave the team');
         }
 
-        $user->surveys()->withTrashed()->where('team_id', $team->id)->each (function  (Survey $survey) use($team) {
+        $team->surveys()->withTrashed()->where('user_id', Auth::id())->each (function  (Survey $survey) use($team) {
             $survey->user_id = $team->user_id;
             $survey->save();
         });
@@ -126,8 +127,8 @@ class TeamUserController extends Controller
 
         $this->authorize('isUserTeamLeader', $team);
 
-        if($team->user_id != Auth::id()){
-            return abort(403, "Only a team's owner can preform this action");
+        if($team->user_id != $user->id){
+            return abort(403, "Teamowner cannot be kicked");
         }
 
         if(!($team->members->pluck('id')->contains($user->id))){

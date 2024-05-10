@@ -55,6 +55,14 @@ class Choice extends Model
 
     }
 
+    public function parentQuestionIsSoftDeleted(){
+        return $this->question->deleted_at === null;
+    }
+
+    public function grandparentSurveyIsSoftDeleted(){
+        return $this->question->survey->deleted_at === null;
+    }
+
     protected static function booted(): void
     {
         parent::boot();

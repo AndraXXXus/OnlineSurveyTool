@@ -120,7 +120,7 @@ class SurveyController extends Controller
     public function restore(String $survey)
     {
         $survey = Survey::onlyTrashed()->where('user_id',Auth::id())->findOrFail($survey);
-
+        
         $this->authorize('surveyAndUserMatch', $survey);
 
         $survey->restore();

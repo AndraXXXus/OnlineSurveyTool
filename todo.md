@@ -1,7 +1,7 @@
 -   [ ] backend tests!!!! -> controller endpointok
 -   [ ] Readme.md!!
 -   [ ] factroy 4 answers!!
--   [ ] Team softdelete
+-   [✓] Team softdelete
 
 -   [✓] Hierarchical
 -   [✓] profile: controller blade, pending, user details/password change, delete user

@@ -86,6 +86,10 @@ class Question extends Model
         return $this->question_position < $this->survey()->first()->questions()->get()->count();
     }
 
+    public function parentSurveyIsSoftDeleted(){
+        return $this->survey->deleted_at === null;
+    }
+
     protected $casts = [
         'question_position' => 'integer',
         'question_type'=> 'string',
@@ -99,20 +103,20 @@ class Question extends Model
             $question->id = Str::uuid()->toString();
         });
 
-        static::deleted(function (Question $question) {
-            $question->choices->each->delete();
-        });
+        // static::deleted(function (Question $question) {
+        //     $question->choices->each->delete();
+        // });
 
-        static::restoring(function(Question $question) {
-            $deleted_at = $question->deleted_at;
+        // static::restoring(function(Question $question) {
+        //     $deleted_at = $question->deleted_at;
 
-            $question->choices()
-                ->onlyTrashed()->where('deleted_at', '>=', $deleted_at)
-                ->get()
-                ->each(function ($choice) {
-                    $choice->restore();
-                });
-        });
+        //     $question->choices()
+        //         ->onlyTrashed()->where('deleted_at', '>=', $deleted_at)
+        //         ->get()
+        //         ->each(function ($choice) {
+        //             $choice->restore();
+        //         });
+        // });
     }
 
     public function deepCopyQuestion(Survey $new_survey) {

@@ -9,12 +9,12 @@
         $data_bs_target= 'delete_team_modal_'.$team->id;
     @endphp
 
-@if($team->members->count() > 1)
+{{-- @if($team->members->count() > 1)
     Need to kick all other: {{$team->members->count()-1}} user(s)!
 @else
     @if($team->surveys()->withTrashed()->count()>0)
     Team still has {{$team->surveys->count()}} survey(s) / {{$team->surveys()->onlyTrashed()->count()}} archived survey(s) left!
-    @else
+    @else --}}
         <button title={{$title}} class="btn btn btn-danger" data-bs-toggle="modal" data-bs-target="#{{$data_bs_target}}">
             <span><i class="{{$icon}}"></i> {{$title}}  </span>
         </button>
@@ -59,6 +59,6 @@
                 </form>
             </div>
         </div>
-
+{{--
     @endif
-@endif
+@endif --}}

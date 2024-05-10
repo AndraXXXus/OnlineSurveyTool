@@ -66,21 +66,21 @@ class Survey extends Model
             $survey->id = Str::uuid()->toString();
         });
 
-        static::deleted(function (Survey $survey) {
-            $survey->questions->each->delete();
-        });
+        // static::deleted(function (Survey $survey) {
+        //     $survey->questions->each->delete();
+        // });
 
 
-        static::restoring(function(Survey $survey) {
-            $deleted_at = $survey->deleted_at;
+        // static::restoring(function(Survey $survey) {
+        //     $deleted_at = $survey->deleted_at;
 
-            $survey->questions()->onlyTrashed()
-            ->where('deleted_at', '>=', $deleted_at)
-            ->get()
-            ->each(function ($question) {
-                $question->restore();
-            });
-        });
+        //     $survey->questions()->onlyTrashed()
+        //     ->where('deleted_at', '>=', $deleted_at)
+        //     ->get()
+        //     ->each(function ($question) {
+        //         $question->restore();
+        //     });
+        // });
 
     }
     public function deepCopySurvey() {
