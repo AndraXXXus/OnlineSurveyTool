@@ -1,33 +1,66 @@
 @php
-    $route = route('profile.destroy');
-    $id = 'delete_profile_' . Auth::id();
+$route = route('profile.destroy');
+$button_id = 'forcedelete_team_'.Auth::id();
+$text = 'Permanently Delete Team and lose access to it';
+$title = 'Permanently Delete User and lose access to it';
+$icon = "fa-solid fa-trash";
+$class = "btn btn btn-danger";
+$data_bs_target= 'forcedelete_user_modal_'.Auth::id();
 @endphp
 
 <div class="row mt-3 mb-3 text-center">
-@if(Auth::User()->teams->count() > 0)
+@if(Auth::User()->teams()->where('user_id', Auth::id())->count() > 0)
     <a
     title="To Team Management"
     href="{{ route('team.index') }}"
     >
-    <h3 style="color:red">You need to delete all your teams / membersips first! </h3>
+    <h3 style="color:red">You cannot own any Teams!  </h3>
     </a>
 @else
-    <form id="{{ $id }}" method="POST" action="{{ $route }}">
-        @method('DELETE')
-        @csrf
-        <a
-            title="Delete Profile"
-            class = "btn btn btn-danger"
-            href="{{ $route }}"
-            onclick="event.preventDefault();
-            document.getElementById('{{ $id  }}').submit();"
-        >
 
-            <i class="fa-solid fa-trash"></i>
+<button title={{$title}} class="btn btn btn-danger" data-bs-toggle="modal" data-bs-target="#{{$data_bs_target}}">
+    <span><i class="{{$icon}}"></i> {{$title}}  </span>
+</button>
 
-            Delete User
+<div class="modal fade" id="{{$data_bs_target}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <form id={{ $button_id }} method="POST" action="{{ $route }}">
+            @method('DELETE')
+            @csrf
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Confirm Permanent User Delete</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to PERMANENTLY DELETE your account,
+                    <strong>{{ Auth::User()->name }}</strong>?
 
-        </a>
-    </form>
-@endif
+                    <br>
+                    <strong>You will lose acces to it!</strong>
+                </div>
+                <div class="modal-footer d-flex justify-content-between">
+                    <button title="Cancel" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+
+                    <a
+                        title="{{$title}}"
+                        class = "{{$class}}"
+                        href="{{ $route }}"
+                        onclick="event.preventDefault();
+                        document.getElementById('{{$button_id}}').submit();"
+                    >
+
+                        <i class="{{$icon}}"></i>
+
+                        {{$text}}
+
+                    </a>
+
+                </div>
+            </div>
+        </form>
+    </div>
 </div>
+
+@endif

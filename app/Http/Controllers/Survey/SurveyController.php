@@ -169,7 +169,7 @@ class SurveyController extends Controller
         $this->authorize('surveyAndUserMatch', $survey);
 
         $cover_image_path = $survey->cover_image_path;
-        $deleted = $survey->forcedelete();
+        $deleted = $survey->forceDelete();
 
         if (!$deleted) {
             return abort(500);

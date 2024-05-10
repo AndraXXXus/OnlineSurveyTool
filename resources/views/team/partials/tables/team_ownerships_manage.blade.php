@@ -17,7 +17,7 @@
             <td>@include('team.create')</td>
             <td>{{$team->teamleader()->name}}</td>
             <td>@include('team.partials.buttons.change_teamleader_modal',['title'=> 'Change Team Leader', 'data_bs_target'=> 'chage_teamleader_'.$team->id])</td>
-            <td>@include('team.partials.buttons.delete_team')</td>
+            <td>@include('team.partials.buttons.archive_team')</td>
         </tr>
 
         @endforeach

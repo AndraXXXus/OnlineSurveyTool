@@ -1,7 +1,7 @@
 @php
     $button_id = 'teamuser_invitation_' . $team->id;
     $route = route('teamuser.invitation', ['team'=> $team]);
-    $class = "btn btn-info";
+    $class = "btn btn-success";
     $icon = "fa-solid fa-paper-plane";
 @endphp
 

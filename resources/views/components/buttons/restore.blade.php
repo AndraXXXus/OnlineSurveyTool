@@ -6,7 +6,7 @@ $title="Restore";
 $icon = "fa-solid fa-redo-alt";
 @endphp
 
-@include('components.buttons.atomic.form_post',
+@include('components.buttons.atomic.form_put',
     ['route' => $route, 'button_id' => $button_id , 'text' => "", 'title' => $title, 'class' => $class, 'text'=>$text, 'icon'=>$icon])
 
 

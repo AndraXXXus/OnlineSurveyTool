@@ -29,13 +29,11 @@ class ProfileController extends Controller
         $user = User::findOrFail(Auth::id());
 
         if ($user->teams->count()>0){
-            return redirect()->back()->with('warning', 'Deleting user only possible if you are no longer a member of any team!');
+            return redirect()->back()->with('warning', 'Deleting user only possible if you are no longer own any team!');
         }
-        // if($user->surveys()->withTrashed()->count()>0){
-        //     return redirect()->back()->with('warning', 'Delete only possible if you no longer own any (archived) surveys!');
-        // }
 
-        $user->forcedelete();
+
+        $user->forceDelete();
         Auth::logout();
         return redirect('/login')->with('success', 'User Deleted Successfully!');
     }

@@ -82,10 +82,11 @@ Route::group(['middleware' => ['auth']], function() {
 
 
     //restore
-    Route::post('surveys/restore/{survey}', [SurveyController::class, 'restore'])->name('surveys.restore');
-    Route::post('questions/restore/{question}', [QuestionController::class, 'restore'])->name('questions.restore');
-    Route::post('choices/restore/{choice}', [ChoiceController::class, 'restore'])->name('choices.restore');
-    Route::post('questionnaire/restore/{survey}', [QuestionnaireController::class, 'restore'])->name('questionnaires.restore');
+    Route::put('surveys/restore/{survey}', [SurveyController::class, 'restore'])->name('surveys.restore');
+    Route::put('questions/restore/{question}', [QuestionController::class, 'restore'])->name('questions.restore');
+    Route::put('choices/restore/{choice}', [ChoiceController::class, 'restore'])->name('choices.restore');
+    Route::put('questionnaire/restore/{survey}', [QuestionnaireController::class, 'restore'])->name('questionnaires.restore');
+    //getreplica
     Route::post('questionnaires/getreplica/{survey}', [QuestionnaireController::class, 'getreplica'])->name('questionnaires.getreplica');
 
     //download
@@ -103,15 +104,18 @@ Route::group(['middleware' => ['auth']], function() {
     Route::put('teamuser/{team}/kick/{user}', [TeamUserController::class, 'kick'])->name('teamuser.kick');
 
     //user
-    Route::put('user/update/{user}', [ProfileController::class, 'update'])->name('profile.update');
-    Route::put('user/changepassword/{user}', [ProfileController::class, 'changepassword'])->name('profile.changepassword');
-    Route::delete('user/destroy/', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::put('profile/update/{user}', [ProfileController::class, 'update'])->name('profile.update');
+    Route::put('profile/changepassword/{user}', [ProfileController::class, 'changepassword'])->name('profile.changepassword');
+    Route::delete('profile/destroy/', [ProfileController::class, 'destroy'])->name('profile.destroy');
     //teamowned
-    
+
     Route::put('team/giveawayteamleadership/{team}', [TeamController::class, 'giveawayteamleadership'])->name('team.giveawayteamleadership');
     Route::delete('team/destory/{team}', [TeamController::class, 'destory'])->name('team.destory');
     Route::put('team/update/{team}', [TeamController::class, 'update'])->name('team.update');
     Route::post('team/store/', [TeamController::class, 'store'])->name('team.store');
+    Route::get('team/archived/', [TeamController::class, 'archived'])->name('team.archived');
+    Route::put('team/restore/{team}', [TeamController::class, 'restore'])->name('team.restore');
+    Route::delete('team/forcedelete/{team}', [TeamController::class, 'forcedelete'])->name('team.forcedelete');
 
     //rest
     Route::resource('surveys', SurveyController::class)->except(['restore','update','create','golive']);

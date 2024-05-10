@@ -22,11 +22,11 @@ class TeamController extends Controller
         return view('team.index')->with(['user' => $user]);
     }
 
-    // public function archived()
-    // {
-    //     $user = Auth::user();
-    //     return view('team.archived')->with(['user' => $user]);
-    // }
+    public function archived()
+    {
+        $user = Auth::user();
+        return view('team.archived')->with(['user' => $user]);
+    }
 
     public function store(Request $request){
         $data = $request->validate([
@@ -63,10 +63,6 @@ class TeamController extends Controller
         ]);
         $new_owner = User::findOrFail($data['new_teamleader_user_id']);
 
-        if($team->members->pluck('id')->contains($new_owner->id)){
-            return redirect()->back()->with('danger', 'User is not a member of this team');
-        }
-
         $team->user_id = $data['new_teamleader_user_id'];
         $team->save();
 
@@ -77,43 +73,33 @@ class TeamController extends Controller
 
         $this->authorize('isUserTeamLeader', $team);
 
-        // if($team->members->count()>1){
-        //     return redirect()->back()->with('warning', "Team still has members");
-        // }
-        // if($team->surveys()->withTrashed()->count()>0){
-        //     return redirect()->back()->with('warning', "Team still has surveys left");
-        // }
-
-        // $team->members()->detach(Auth::id());
-        $team->invitations()->detach();
-
         $deleted = $team->delete();
-        $team->surveys()->withTrashed()->each (function  (Survey $survey){
-            $survey->delete();
-        });
-
 
         if (!$deleted) {
             return abort(500);
         }
 
-        return redirect()->back()->with('success', "Team: '" . $team->team_name . "' Successfully Archived!");
+        return redirect()->back()->with('success', "Team: '" . $team->team_name . "' successfully archived!");
     }
 
-    public function forcedelete(Team $team){
+    public function restore(String $team){
+        $team = Team::onlyTrashed()->findOrFail($team);
+        $this->authorize('isUserTeamLeader', $team);
+
+        $team->restore();
+
+        return redirect()->back()->with('success', "Team: '" . $team->team_name . "' successfully restored!");
+    }
+
+    public function forcedelete(String $team){
+
+        $team = Team::onlyTrashed()->findOrFail($team);
 
         $this->authorize('isUserTeamLeader', $team);
 
-        $team->members()->detach();
-        $team->invitations()->detach();
+        $forcedelete = $team->forceDelete();
 
-        $deleted = $team->delete();
-        $team->surveys()->withTrashed()->each (function  (Survey $survey){
-            $survey->forcedelete();
-        });
-
-
-        if (!$deleted) {
+        if (!$forcedelete) {
             return abort(500);
         }
 

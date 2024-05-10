@@ -214,7 +214,7 @@ class ChoiceController extends Controller
         $question = $choice->question;
         $survey = $question->survey;
 
-        $deleted = $choice->forcedelete();
+        $deleted = $choice->forceDelete();
         if (!$deleted) {
             return abort(500);
         }

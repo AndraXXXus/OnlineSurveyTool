@@ -79,7 +79,7 @@ class QuestionnaireController extends Controller
 
         //$this->authorize('delete', $survey);
 
-        $deleted = $survey->forcedelete();
+        $deleted = $survey->forceDelete();
         if (!$deleted) {
             return abort(500);
         }

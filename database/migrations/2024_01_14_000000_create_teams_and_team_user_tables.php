@@ -23,8 +23,8 @@ class CreateTeamsAndTeamUserTables extends Migration
         });
 
         Schema::create('team_user', function (Blueprint $table) {
-            $table->foreignUuid('team_id')->references('id')->on('teams');
-            $table->foreignUuid('user_id')->references('id')->on('users');
+            $table->foreignUuid('team_id')->references('id')->on('teams')->onDelete('cascade');
+            $table->foreignUuid('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->enum('status', ['pending', 'accepted'])->default('pending');
             $table->primary(['team_id', 'user_id']);
             $table->timestamps();

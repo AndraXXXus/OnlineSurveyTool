@@ -5,23 +5,6 @@
 
 <div class="container">
     <div class="row justify-content-between">
-        <div class="col p-3">
-
-            <h1>Manage Team's Owned
-            </h1>
-            @include('team.create')
-
-
-        </div>
-
-        <div class="col p-3">
-            <div class="d-flex justify-content-end gap-3">
-                <div class="p-3 m-3 text-end">
-                    <h1>{{$user->name}}</h1>
-                    <p>{{$user->email}}</p>
-                </div>
-            </div>
-        </div>
         <div x-data="{show: true}" x-init="setTimeout(() => show = false, 5000)" x-show="show">
             @if(session()->has('success'))
                 <div class="alert alert-success">
@@ -37,8 +20,28 @@
             <div class="alert alert-warning">
                 {{ session()->get('danger') }}
             </div>
-        @endif
+            @endif
         </div>
+        <div class="col p-3">
+
+            <h1>Manage Team's Owned
+            </h1>
+            @include('team.create')
+
+
+        </div>
+
+        <div class="col p-3">
+            <div class="d-flex justify-content-end gap-3">
+                <div class="p-3 m-3 text-end">
+                    <h1>{{$user->name}}</h1>
+                    <p>{{$user->email}}</p>
+                    @include('team.partials.buttons.to_archived_teams')
+                </div>
+            </div>
+
+        </div>
+
 
     </div>
     <hr>
@@ -69,42 +72,21 @@
             <div class="row">
 
                 @foreach ($user->teams_owned() as $team)
-                <div class="card p-3 m-2">
-                    <div class="card p-4">
-                        <h4>{{$team->team_name}}</h4>
-                        <div class="mb-4">
-                            @include('team.partials.forms.send_team_invite')
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="card p-4">
-                        <div class="d-flex justify-content-center row mb-3">
-                            @if($team->invitations->count() > 0)
-                            @include('team.partials.tables.teams_members_invited')
-                            @else
-                            <div class="col-12">
-                                <div class="alert alert-warning" role="alert">
-                                    No pending invitations.
-                                </div>
-                            </div>
-                            @endif
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="card p-4">
-                        <div class="d-flex justify-content-center row mb-3">
-                            @if($team->members->count() > 1)
-                            @include('team.partials.tables.teams_owned_members')
-                            @else
-                            <div class="col-12">
-                                <div class="alert alert-warning" role="alert">
-                                    No other members beside you
-                                </div>
-                            </div>
 
-                            @endif
+                <div class="card p-3 m-2">
+
+
+                    <div x-data="{ open: false }" >
+                        <div class="d-flex justify-content-between  m-3">
+                            <h4>{{$team->team_name}}</h4>
+                            <button class="btn btn-info" x-on:click="open = ! open" x-text="open == true ? 'Close' : 'Details' ; ">Details</button>
+                        </div>
+                        <div x-show="open" x-transition>
+                            @include('team.partials.tables.team_member_details')
                         </div>
                     </div>
+
+
                 </div>
 
 

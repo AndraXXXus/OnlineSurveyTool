@@ -53,5 +53,26 @@ class Team extends Model
         static::creating(function (Team $team) {
             $team->id = Str::uuid()->toString();
         });
+
+        static::deleted(function (Team $team) {
+            $team->surveys->each->delete();
+        });
+
+        static::restoring(function(Team $team) {
+            $deleted_at = $team->deleted_at;
+
+            $team->surveys()->onlyTrashed()
+            ->where('deleted_at', '>=', $deleted_at)
+            ->each(function ($survey) {
+                $survey->restore();
+            });
+        });
+        static::forceDeleting(function (Team $team) {
+            $team->members()->detach();
+            $team->invitations()->detach();
+            $team->surveys()->withTrashed()->each(function ($survey) {
+                $survey->forceDelete();
+            });
+        });
     }
 }
