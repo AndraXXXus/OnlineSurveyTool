@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Profile;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Team\Team;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Storage;
@@ -11,6 +12,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
+use App\Models\Survey\Survey;
 
 class ProfileController extends Controller
 {
@@ -28,10 +30,21 @@ class ProfileController extends Controller
     {
         $user = User::findOrFail(Auth::id());
 
-        if ($user->teams->count()>0){
-            return redirect()->back()->with('warning', 'Deleting user only possible if you are no longer own any team!');
+        if ($user->teams_owned_withArchived()->count()>0){
+            return redirect()->back()->with('danger', 'Deleting user only possible if you are no longer own any team(s)!');
         }
 
+        $user->teams()->withTrashed()->each(function (Team $team) {
+            $team->surveys()->withTrashed()->where('user_id', Auth::id())->each (function  (Survey $survey) use($team) {
+                $survey->user_id = $team->teamleader()->id;
+                $survey->save();
+            });
+                $team->members()->detach(Auth::id());
+        });
+
+        $user->invitations()->withTrashed()->each(function (Team $team) {
+            $team->invitations()->detach(Auth::id());
+        });
 
         $user->forceDelete();
         Auth::logout();

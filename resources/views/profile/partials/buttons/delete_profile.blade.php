@@ -8,13 +8,13 @@ $class = "btn btn btn-danger";
 $data_bs_target= 'forcedelete_user_modal_'.Auth::id();
 @endphp
 
-<div class="row mt-3 mb-3 text-center">
-@if(Auth::User()->teams()->where('user_id', Auth::id())->count() > 0)
+<div class="mt-3 mb-3 text-center">
+@if(Auth::User()->teams_owned_withArchived()->count() > 0)
     <a
     title="To Team Management"
     href="{{ route('team.index') }}"
     >
-    <h3 style="color:red">You cannot own any Teams!  </h3>
+    <h3 style="color:red">You cannot own any <strong>{{Auth::User()->teams_owned()->count() > 0 ? "" : "Archived"}} Teams!</strong>  </h3>
     </a>
 @else
 

@@ -10,6 +10,11 @@
                 {{ session()->get('success') }}
             </div>
         @endif
+        @if(session()->has('danger'))
+            <div class="alert alert-warning">
+                {{ session()->get('danger') }}
+            </div>
+        @endif
     </div>
     <div class="row justify-content-between">
 

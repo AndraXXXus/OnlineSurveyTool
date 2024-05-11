@@ -144,8 +144,11 @@ class QuestionnaireStoreController extends Controller
             ]
         );
 
-        Answer::select()->where('question_id',$question->id)->where('responder_id',$responder_id)->get()->each(function (Answer $answer) {
-            $answer->forceDelete();});
+        Answer::select()->where('question_id',$question->id)
+        ->where('responder_id',$responder_id)->get()
+        ->each(function (Answer $answer) {
+            $answer->forceDelete();}
+        );
 
 
         if($validated!==[]){
