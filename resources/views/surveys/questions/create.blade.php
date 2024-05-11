@@ -64,19 +64,19 @@
         <div class="form-group row mb-3 p-2">
             <label for="question_type" class="col-sm-2 col-form-label">Question Type*</label>
             <div class="col-sm-10">
-                <select name="question_type" id="question_type" class="form-control @error('question_type') is-invalid @enderror" >
+                <select name="question_type" id="question_type" class="form-select @error('question_type') is-invalid @enderror" >
                     @isset($question)
                         @foreach ($allowedQuestionTypes as $allowedQuestionType)
-                            <option value="{{$allowedQuestionType}}" {{$allowedQuestionType === old('question_type', $question->question_type) ? 'selected' : '' }}>
+                            <option class="form-group-option" value="{{$allowedQuestionType}}" {{$allowedQuestionType === old('question_type', $question->question_type) ? 'selected' : '' }}>
                                 {{$allowedQuestionType}}
                             </option>
                         @endforeach
                     @else
 
-                        <option value="" selected disabled >Open this to select a Question Type</option>
+                        <option class="form-group-option" value="" selected disabled >Open this to select a Question Type</option>
 
                         @foreach ($allowedQuestionTypes as $allowedQuestionType)
-                        <option value="{{ $allowedQuestionType }}"
+                        <option class="form-group-option" value="{{ $allowedQuestionType }}"
                         @if ($allowedQuestionType == old('question_type'))
                             selected="selected"
                         @endif

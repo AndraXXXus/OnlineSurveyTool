@@ -85,7 +85,7 @@ class Survey extends Model
     }
     public function deepCopySurvey() {
         $new_survey = $this->replicate();
-        $new_survey->survey_title = $new_survey->survey_title . " (copy)";
+        $new_survey->survey_title = $new_survey->survey_title;
         $new_survey->save();
 
         if($this->cover_image_path!=null){

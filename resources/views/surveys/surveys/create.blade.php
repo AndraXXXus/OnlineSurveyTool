@@ -24,10 +24,10 @@
         <div class="form-group row mb-3 p-2">
             <label for="team_id" class="col-sm-2 col-form-label">Team*</label>
             <div class="col-sm-10">
-                <select name="team_id" id="team_id" class="form-control @error('team_id') is-invalid @enderror" >
+                <select name="team_id" id="team_id" class="form-select @error('team_id') is-invalid @enderror" >
                     @isset($survey)
                         @foreach (Auth::User()->teams as $team)
-                            <option value="{{$team->id}}" {{$team->id === old('team_id', $survey->team_id) ? 'selected' : '' }}>
+                            <option class="form-group-option" value="{{$team->id}}" {{$team->id === old('team_id', $survey->team_id) ? 'selected' : '' }}>
                                 {{$team->team_name}} @if($team->user_id === Auth::id() ) * @endif
                             </option>
                         @endforeach
