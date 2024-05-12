@@ -13,11 +13,11 @@
 
                         <div class="card w-100">
 
-                            <div class="card-header">
+                            {{-- <div class="card-header">
                                 <div class="d-flex items-center gap-2 justify-content-center ">
                                     @include('surveys.questions.partials.cards.card')
                                 </div>
-                            </div>
+                            </div> --}}
 
                             <div class="card-body">
                                 <div class="d-flex items-center gap-2 justify-content-center ">

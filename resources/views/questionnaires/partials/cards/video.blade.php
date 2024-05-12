@@ -19,8 +19,8 @@
             videoId: @js(isset($question->video_no_controlls) ? $question->youtube_id : 'QohH89Eu5iM'),
             playerVars: {
             'playsinline': 1,
-            'controls': @js($question->video_no_controlls ? 1 : 0),
-            'disablekb': @js($question->video_no_controlls ? 1 : 0),
+            'controls': @js($question->video_no_controlls == true) ? 0 : 1,
+            'disablekb': @js($question->video_no_controlls == true) ? 1 : 0,
             // 'mute':1,
             },
             events: {
