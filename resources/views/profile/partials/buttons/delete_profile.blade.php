@@ -10,12 +10,14 @@ $data_bs_target= 'forcedelete_user_modal_'.Auth::id();
 
 <div class="mt-3 mb-3 text-center">
 @if(Auth::User()->teams_owned_withArchived()->count() > 0)
+    <button class = "btn btn btn-warning">
     <a
     title="To Team Management"
     href="{{ route('team.index') }}"
     >
-    <h3 style="color:red">You cannot own any <strong>{{Auth::User()->teams_owned()->count() > 0 ? "" : "Archived"}} Teams!</strong>  </h3>
+    <h3 style="color:red">If you want to delete this user, you need to disown all your {{Auth::User()->teams_owned()->count() > 0 ? "" : "(Archived)"}} <strong>Teams!</strong>  </h3>
     </a>
+    </button>
 @else
 
 <button title={{$title}} class="btn btn btn-danger" data-bs-toggle="modal" data-bs-target="#{{$data_bs_target}}">

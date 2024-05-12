@@ -76,7 +76,7 @@
                 <div class="card p-3 m-2">
 
 
-                    <div x-data="{ open: false }" >
+                    <div x-data="{ open: $persist(false) }" >
                         <div class="d-flex justify-content-between  m-3">
                             <h4>{{$team->team_name}}</h4>
                             <button class="btn btn-info" x-on:click="open = ! open" x-text="open == true ? 'Close' : 'Details' ; ">Details</button>

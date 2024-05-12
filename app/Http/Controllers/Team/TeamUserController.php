@@ -23,6 +23,7 @@ class TeamUserController extends Controller
 
         $data = $request->validate([
             'email_'.$team->id => ['required', 'string', 'email', Rule::in(User::all()->pluck('email'))],
+
         ]);
 
         $user = User::where('email', $data['email_'.$team->id])->first();
