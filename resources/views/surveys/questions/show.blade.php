@@ -20,6 +20,11 @@
                 Survey restored successfully!
             </div>
         @endif
+        @if (Session::has('question_restored'))
+            <div class="alert alert-success">
+                Survey restored successfully!
+            </div>
+        @endif
         @if (Session::has('question_deleted'))
             <div class="alert alert-success">
                 Question softdeleted successfully!

@@ -1,4 +1,5 @@
 <form id={{'questionnaires.restore_'.$survey->id}} method="POST" action="{{ route('questionnaires.restore', $survey->id) }}">
+    @method('PUT')
     @csrf
     <a
         title="Restore"

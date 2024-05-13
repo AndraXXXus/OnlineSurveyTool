@@ -55,7 +55,7 @@
             </div>
         @endif
         @if (Session::has('chioce_restored'))
-            <div class="alert alert-danger">
+            <div class="alert alert-success">
                 Choice successfully restored!
             </div>
         @endif
