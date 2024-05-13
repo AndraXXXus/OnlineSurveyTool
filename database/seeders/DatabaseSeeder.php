@@ -79,14 +79,16 @@ class DatabaseSeeder extends Seeder
                 $allowedQuestionTypes = Question::getAllowedQuestionTypes();
                 for ($k = 1; $k <= $num_q; $k++) {
                     $do_video = rand(0, 1);
+                    $required = rand(0, 1);
                     $current_question = Question::factory()->create([
                         'survey_id' => $current_survey->id,
                         'question_position'=> $k,
-                        'question_required' => rand(0, 1),
+                        'question_required' => $required == 1 ? true : false,
                         'question_text'=> $k . '. question of the ' . $j .'. survey ' . 'for the ' . $i.'. user',
                         "question_type"=> $allowedQuestionTypes[($k-1) % 4],
                         'youtube_id' => $do_video == 1 ? '1O0yazhqaxs' : null,
                         'prefer_video' => $do_video == 1 ? true : false,
+                        'video_no_controlls' => $required == 1 ? true : false,
                     ]);
 
 

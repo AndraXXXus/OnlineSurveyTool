@@ -136,28 +136,28 @@ class QuestionController extends Controller
             if( $question->youtube_id !=null ){
                 $question->video_no_controlls = $question->question_required;
             }
-        }else{
-            $question->youtube_id = null;
-            $question->video_no_controlls = false;
+            }else{
+                $question->youtube_id = null;
+                $question->video_no_controlls = false;
 
-            $old_cover_image_path = $question->cover_image_path;
+                $old_cover_image_path = $question->cover_image_path;
 
-            if($request->hasFile('cover_image')) {
-                if($old_cover_image_path != null) {
+                if($request->hasFile('cover_image')) {
+                    if($old_cover_image_path != null) {
+                        Storage::disk('public')->delete($old_cover_image_path);
+                    }
+                    $file = $request->file('cover_image');
+                    // $cover_image_path = time();
+                    $question->cover_image_path = $question->id . '.'.$file->getClientOriginalExtension();
+                    Storage::disk('public')->put(
+                        $question->cover_image_path ,$file->get()
+                    );
+                }
+                elseif ( $request->input('remove_cover_image') === "1" ){
+                    $question->cover_image_path = null;
                     Storage::disk('public')->delete($old_cover_image_path);
                 }
-                $file = $request->file('cover_image');
-                // $cover_image_path = time();
-                $question->cover_image_path = $question->id . '.'.$file->getClientOriginalExtension();
-                Storage::disk('public')->put(
-                    $question->cover_image_path ,$file->get()
-                );
             }
-            elseif ( $request->input('remove_cover_image') === "1" ){
-                $question->cover_image_path = null;
-                Storage::disk('public')->delete($old_cover_image_path);
-            }
-        }
         $question->save();
 
         Session::flash('question_updated', $question);
