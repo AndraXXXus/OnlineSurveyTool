@@ -1,8 +1,8 @@
 -   [ ] backend tests!!!! -> controller endpointok
 -   [ ] Readme.md!!
 -   [ ] factroy 4 answers!!
--   [✓] Team softdelete
 
+-   [✓] Team softdelete
 -   [✓] Hierarchical
 -   [✓] profile: controller blade, pending, user details/password change, delete user
 -   [✓] Team: controller blade, kick, create new team, invite new team member, edit team name, team delete, give ownership of another member
