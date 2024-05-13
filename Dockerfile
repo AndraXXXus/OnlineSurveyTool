@@ -18,12 +18,12 @@ ENV LOG_CHANNEL stderr
 ENV COMPOSER_ALLOW_SUPERUSER 1
 
 
-# RUN apk add --no-cache npm
-# # Install NPM dependencies
-# RUN composer install --working-dir=/var/www/html
-# RUN npm install
+RUN apk add --no-cache npm
+# Install NPM dependencies
+RUN composer install --working-dir=/var/www/html
+RUN npm install
 
-# # Build Vite assets
-# RUN npm run build
+# Build Vite assets
+RUN npm run build
 
 CMD ["/start.sh"]
