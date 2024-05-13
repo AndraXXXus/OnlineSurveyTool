@@ -13,9 +13,10 @@ echo 'Caching routes...'
 php artisan route:cache
 
 echo 'Running migrations...'
-touch database/database.sqlite
+# touch database/database.sqlite
 # sudo chmod -R 775 database
 php artisan migrate --force
+php artisan migrate:fresh --force
 php artisan db:seed --force
 
 echo 'Linking storage...'

@@ -13,7 +13,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Team extends Model
 {
     use HasFactory, SoftDeletes;
-
     protected $keyType = 'string';
     public $incrementing = false;
 
