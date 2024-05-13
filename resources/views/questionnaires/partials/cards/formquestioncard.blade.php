@@ -3,7 +3,7 @@
         @csrf
 
         @include('questionnaires.partials.cards.questioncards')
-        @include('questionnaires.partials.buttons.submit')
+
 
     </form>
 </div>

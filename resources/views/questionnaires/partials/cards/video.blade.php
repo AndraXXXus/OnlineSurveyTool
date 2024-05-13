@@ -16,11 +16,11 @@
         player = new YT.Player('youtube_player', {
             width: Math.min(0.80*window.innerWidth,640).toString(),
             height: (Math.min(0.80*window.innerWidth,640)/640*390).toString(),
-            videoId: @js(isset($question->video_no_controlls) ? $question->youtube_id : 'QohH89Eu5iM'),
+            videoId: @js($question->youtube_id != null ? $question->youtube_id : 'QohH89Eu5iM'),
             playerVars: {
             'playsinline': 1,
-            'controls': @js($question->video_no_controlls == true) ? 0 : 1,
-            'disablekb': @js($question->video_no_controlls == true) ? 1 : 0,
+            'controls': @js($question->video_no_controlls == true ? 0 : 1),
+            'disablekb': @js($question->video_no_controlls == true ? 1 : 0),
             // 'mute':1,
             },
             events: {
@@ -45,7 +45,7 @@
             const submit_button = document.getElementById('questionnaire_form_submit_button');
             if(submit_button){
                 document.getElementById('questionnaire_form_submit_button').setAttribute('data-video-seen',true);
-                const inputs_valid =  submit_button.getAttribute('data-inputs-valid')==="true";
+                const inputs_valid =  submit_button.getAttribute('data-inputs-valid')==="true" || @js(count($question->choices))==0;
 
                 submit_button.disabled = !(inputs_valid && true);
             }

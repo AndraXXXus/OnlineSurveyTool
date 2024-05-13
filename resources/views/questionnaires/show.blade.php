@@ -53,15 +53,15 @@
 
 
 </div>
-
+{{$question->question_required==true && (count($question->choices)>0 || $question->youtube_id==null)  }}
 @endsection
 
 <script>
 
     document.addEventListener("DOMContentLoaded", function(event) {
         const submit_button = document.getElementById('questionnaire_form_submit_button');
-        submit_button.disabled = @js(count($previous_answers_choice_ids)===0 ? $question->question_required==true && count($question->choices)>0 : false);
-        submit_button.setAttribute('data-video-seen',!submit_button.disabled || @js($question->youtube_id===null));
-        submit_button.setAttribute('data-inputs-valid',!submit_button.disabled);
+        submit_button.disabled = @js(count($previous_answers_choice_ids)===0 ? $question->question_required==true && (count($question->choices)>0 || $question->youtube_id != null) : false);
+        submit_button.setAttribute('data-video-seen', !submit_button.disabled || @js($question->youtube_id===null));
+        submit_button.setAttribute('data-inputs-valid', !submit_button.disabled);
     });
 </script>
