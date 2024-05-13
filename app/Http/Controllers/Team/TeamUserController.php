@@ -120,7 +120,7 @@ class TeamUserController extends Controller
 
         $this->authorize('isUserTeamLeader', $team);
 
-        if($team->user_id != $user->id){
+        if($team->user_id === $user->id){
             return abort(403, "Teamowner cannot be kicked");
         }
 
