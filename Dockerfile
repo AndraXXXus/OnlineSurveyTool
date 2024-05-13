@@ -27,4 +27,3 @@ ENV COMPOSER_ALLOW_SUPERUSER 1
 # RUN npm run build
 
 CMD ["/start.sh"]
-EXPOSE 10000
