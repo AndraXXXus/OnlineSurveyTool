@@ -16,12 +16,13 @@ ENV LOG_CHANNEL stderr
 # Allow composer to run as root
 ENV COMPOSER_ALLOW_SUPERUSER 1
 
-RUN composer install --working-dir=/var/www/html
+
 RUN apk add --no-cache npm
 # Install NPM dependencies
-RUN npm install
+# RUN composer install --working-dir=/var/www/html
+# RUN npm install
 
-# Build Vite assets
-RUN npm run build
+# # Build Vite assets
+# RUN npm run build
 
 CMD ["/start.sh"]
