@@ -17,7 +17,7 @@ class CreateAnswersTable extends Migration
             $table->uuid('id')->primary();
             $table->uuid('responder_id')->index();
             $table->foreignUuid('survey_id')->references('id')->on('surveys')->onDelete('cascade');
-            $table->foreignUuid('question_id')->references('id')->on('questions');
+            $table->foreignUuid('question_id')->references('id')->on('questions')->index();
             $table->foreignUuid('choice_id')->references('id')->on('choices');
             $table->string('answer_text',255)->required();
             $table->timestamp('question_started_at')->required();

@@ -164,7 +164,7 @@ class QuestionnaireStoreController extends Controller
 
     public function store(Request $request, string $questionnaire_id)
     {
-        $questionnaire = Survey::whereNull('deleted_at')->whereNotNull('questionnaire_id')->where('questionnaire_id',$questionnaire_id)->first();
+        $questionnaire = Survey::whereNull('deleted_at')->where('questionnaire_id',$questionnaire_id)->first();
 
         if($questionnaire === null){
             return abort(419);
