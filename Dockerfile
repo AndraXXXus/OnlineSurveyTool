@@ -26,3 +26,4 @@ RUN apk add --no-cache npm
 # RUN npm run build
 
 CMD ["/start.sh"]
+EXPOSE 10000
