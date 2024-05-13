@@ -3,6 +3,7 @@ FROM richarvey/nginx-php-fpm:3.1.6
 COPY . .
 
 # Image config
+ENV SKIP_COMPOSER 1
 ENV WEBROOT /var/www/html/public
 ENV PHP_ERRORS_STDERR 1
 ENV RUN_SCRIPTS 1
@@ -17,13 +18,13 @@ ENV LOG_CHANNEL stderr
 ENV COMPOSER_ALLOW_SUPERUSER 1
 
 
-RUN apk add --no-cache npm
-Install NPM dependencies
-RUN composer install --working-dir=/var/www/html
-RUN npm install
+# RUN apk add --no-cache npm
+# # Install NPM dependencies
+# RUN composer install --working-dir=/var/www/html
+# RUN npm install
 
-# Build Vite assets
-RUN npm run build
+# # Build Vite assets
+# RUN npm run build
 
 CMD ["/start.sh"]
 EXPOSE 10000

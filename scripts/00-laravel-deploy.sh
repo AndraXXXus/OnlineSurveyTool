@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# echo 'Run composer'
-# composer install --working-dir=/var/www/html
+echo 'Run composer'
+composer install --working-dir=/var/www/html
 
-# echo 'Run npm'
-# npm install
-# npm run build
+echo 'Run npm'
+npm install
+npm run build
 
 echo 'Caching config...'
 php artisan config:cache
