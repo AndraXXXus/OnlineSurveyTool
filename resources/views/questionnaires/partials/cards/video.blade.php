@@ -1,4 +1,12 @@
-<div id="youtube_player"></div>
+@php
+    $youtube_link = $question->youtube_id != null ? 'https://www.youtube.com/embed/' . $question->youtube_id . "&output=embed" : 'https://www.youtube.com/embed/QohH89Eu5iM'
+@endphp
+{{-- {{$youtube_link }} --}}
+<div id="youtube_player">
+    <div>
+        Video cant be embeded without java script
+    </div>
+</div>
 
 <script>
     // 2. This code loads the IFrame Player API code asynchronously.

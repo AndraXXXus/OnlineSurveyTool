@@ -53,7 +53,7 @@
 
 
 </div>
-{{$question->question_required==true && (count($question->choices)>0 || $question->youtube_id==null)  }}
+
 @endsection
 
 <script>

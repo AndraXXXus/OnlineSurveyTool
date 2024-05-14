@@ -172,13 +172,19 @@ class QuestionnaireStoreController extends Controller
 
         $responder_id = Session::get('responder_id');
         $question = Session::get('question');
-        $survey = $question->survey;
+
+        if($responder_id === null || $question === null){
+            return abort(419);
+        }
+
         if($questionnaire === null){
             return abort(419);
         }
+
+        $survey = $question->survey;
         $survey_id = $survey->id;
 
-        if($responder_id === null || $question === null || $questionnaire->id !== $survey->id){
+        if($questionnaire->id !== $survey->id){
             return abort(419);
         }
 

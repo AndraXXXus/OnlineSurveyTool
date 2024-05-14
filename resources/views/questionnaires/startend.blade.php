@@ -14,8 +14,9 @@
 
             <h1> Welcome to the survey! </h1>
             <h2> Feel free to take it!</h2>
+            @isset($survey)
             @include('surveys.questions.partials.cards.card')
-
+            @endisset
             @if(isset($finished) && $finished===true)
             <div class="px-2.5 py-2 flex-1 flex flex-col justify-between">
                 <h3 class="text-success">Thank you for participating in our survey!</h3>
