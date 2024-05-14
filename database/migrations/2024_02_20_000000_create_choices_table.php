@@ -22,7 +22,7 @@ class CreateChoicesTable extends Migration
             $table->softDeletes();
             //$table->foreignId('question_id')->constrained()->onDelete('cascade');
             $table->foreignUuid('question_id')->references('id')->on('questions')->onDelete('cascade');
-            $table->unique(["question_id", "choice_position"], 'question_id_position_unique');
+            $table->unique(["question_id", "choice_position"], 'question_id_choice_position_unique');
         });
     }
 

@@ -16,7 +16,7 @@ class CreateSurveysTable extends Migration
         Schema::create('surveys', function (Blueprint $table) {
             $table->uuid('id')->primary()->index();
             $table->string('survey_title', 255)->required();
-            $table->text('survey_description',512 )->nullable();
+            $table->text('survey_description', 511 )->nullable();
             $table->string('cover_image_path')->nullable();
             $table->foreignUuid('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreignUuid('team_id')->references('id')->on('teams')->onDelete('cascade');

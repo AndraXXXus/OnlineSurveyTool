@@ -28,7 +28,7 @@ class CreateQuestionsTable extends Migration
             $table->softDeletes();
             // $table->foreignId('survey_id')->constrained()->onDelete('cascade');
             $table->foreignUuid('survey_id')->references('id')->on('surveys')->onDelete('cascade');
-            $table->unique(["survey_id", "question_position"], 'survey_id_position_unique');
+            $table->unique(["survey_id", "question_position"], 'survey_id_question_position_unique');
         });
     }
 

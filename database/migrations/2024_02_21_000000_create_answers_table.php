@@ -15,7 +15,7 @@ class CreateAnswersTable extends Migration
     {
         Schema::create('answers', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('responder_id')->index();
+            $table->uuid('responder_id')->required()->index();
             $table->foreignUuid('survey_id')->references('id')->on('surveys')->onDelete('cascade');
             $table->foreignUuid('question_id')->references('id')->on('questions')->index();
             $table->foreignUuid('choice_id')->references('id')->on('choices');
