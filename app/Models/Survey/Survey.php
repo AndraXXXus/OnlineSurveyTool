@@ -28,11 +28,6 @@ class Survey extends Model
     'team_id'
     ];
 
-    public function surveys()
-    {
-        return $this->belongsTo(Survey::class);
-    }
-
     public function questions()
     {
         return $this->hasMany(Question::class);

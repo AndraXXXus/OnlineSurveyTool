@@ -18,7 +18,7 @@ class CreateQuestionsTable extends Migration
             $table->uuid('id')->primary()->index();
             $table->unsignedInteger('question_position')->nullable();
             $table->string('question_text',255)->required();
-            $table->string('question_type',255)->required();
+            $table->enum('question_type', ["radio-button","mutiple-choice","dropp-down","open"])->required();
             $table->boolean('question_required')->default(false);
             $table->string('cover_image_path')->nullable();
             $table->string('youtube_id')->nullable();
