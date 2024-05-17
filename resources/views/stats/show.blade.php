@@ -33,7 +33,7 @@
                     'labels' => $data_occurence->pluck('date'),
                     'data' => $data_occurence->pluck('distinct_responders'),
                     'id' =>'dayByday',
-                    "title" => "Daily dist"
+                    "title" => "Daily distribution"
                 ])
 
 
@@ -52,7 +52,7 @@
                     'labels' => $keys,
                     'data' => $values,
                     'id' =>'duration',
-                    "title" => "Fill Duration dist (in mins)"
+                    "title" => "Fill Duration distribution (in minutes)"
                 ])
 
 
