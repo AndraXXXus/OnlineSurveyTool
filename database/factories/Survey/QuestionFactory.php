@@ -18,7 +18,7 @@ class QuestionFactory extends Factory
     public function definition()
     {
         return [
-            'id' => Uuid::uuid4(),
+            // 'id' => Uuid::uuid4(),
             'question_text' => $this->faker->sentence(),
             'cover_image_path' => null,
             'question_required' => false,

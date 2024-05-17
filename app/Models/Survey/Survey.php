@@ -17,8 +17,6 @@ class Survey extends Model
 {
     use HasFactory, SoftDeletes;
     use HasUuids;
-    // protected $keyType = 'string';
-    // public $incrementing = false;
 
     protected $fillable = [
     'user_id',
@@ -50,18 +48,9 @@ class Survey extends Model
         return $this->belongsTo(Team::class);
     }
 
-    // public function getRouteKeyName()
-    // {
-    //     return 'id';
-    // }
-
     // protected static function booted(): void
     // {
     //     parent::boot();
-
-    //     static::creating(function (Survey $survey) {
-    //         $survey->id = Str::uuid()->toString();
-    //     });
 
     //     // static::deleted(function (Survey $survey) {
     //     //     $survey->questions->each->delete();
@@ -82,7 +71,6 @@ class Survey extends Model
     // }
     public function deepCopySurvey() {
         $new_survey = $this->replicate();
-        $new_survey->survey_title = $new_survey->survey_title;
         $new_survey->save();
 
         if($this->cover_image_path!=null){

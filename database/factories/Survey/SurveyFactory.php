@@ -18,7 +18,7 @@ class SurveyFactory extends Factory
     public function definition()
     {
         return [
-            'id' => Uuid::uuid4(),
+            // 'id' => Uuid::uuid4(),
             'survey_title' => $this->faker->sentence(),
             'survey_description' => $this->faker->paragraphs(1, true),
             'cover_image_path' => null,

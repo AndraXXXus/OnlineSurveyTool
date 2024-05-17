@@ -15,8 +15,6 @@ class Team extends Model
 {
     use HasFactory, SoftDeletes;
     use HasUuids;
-    // protected $keyType = 'string';
-    // public $incrementing = false;
 
     protected $fillable = [
         'team_name',
@@ -50,10 +48,6 @@ class Team extends Model
     protected static function booted(): void
     {
         parent::boot();
-
-        // static::creating(function (Team $team) {
-        //     $team->id = Str::uuid()->toString();
-        // });
 
         static::deleted(function (Team $team) {
             $team->surveys->each->delete();

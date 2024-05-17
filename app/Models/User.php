@@ -17,8 +17,6 @@ class User extends Authenticatable
     use HasFactory;
     use HasUuids;
 
-    // protected $keyType = 'string';
-    // public $incrementing = false;
     /**
      * The attributes that are mass assignable.
      *
@@ -49,11 +47,6 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-
-    // public function getRouteKeyName()
-    // {
-    //     return 'id';
-    // }
 
     public function surveys()
     {
@@ -87,10 +80,6 @@ class User extends Authenticatable
     {
         parent::boot();
 
-        // static::creating(function (User $user) {
-        //     $user->id = Str::uuid()->toString();
-        // });
-
         static::created(function (User $user) {
             $team = Team::factory()->create([
                 'user_id' => $user->id,
@@ -101,7 +90,7 @@ class User extends Authenticatable
 
 
         // static::deleting(function (User $user) {
-        //     //todo
+        //     //no todo here, discontinued
         //     $user->surveys()->withTrashed->each->delete();
         // });
 

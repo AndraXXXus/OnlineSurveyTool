@@ -14,21 +14,13 @@ class Question extends Model
 {
     use HasUuids;
     use HasFactory, SoftDeletes;
-    // protected $keyType = 'string';
-    // public $incrementing = false;
 
     protected static $allowedQuestionTypes = ["radio-button","mutiple-choice","dropp-down","open"];
 
     protected $touches = ['survey'];
 
-    // public function getRouteKeyName()
-    // {
-    //     return 'id';
-    // }
-
     public function setQuestionTypeAttribute($value)
     {
-        // Check if the provided value is in the allowed roles list
         if (in_array($value, Question::$allowedQuestionTypes)) {
             $this->attributes['question_type'] = $value;
         } else {
@@ -85,7 +77,7 @@ class Question extends Model
     }
 
     public function positionCanIncrease(){
-        return $this->question_position < $this->survey()->first()->questions()->get()->count();
+        return $this->question_position < $this->survey->questions()->count();
     }
 
     public function parentSurveyIsSoftDeleted(){
@@ -100,10 +92,6 @@ class Question extends Model
     // protected static function booted(): void
     // {
     //     parent::boot();
-
-    //     static::creating(function (Question $question) {
-    //         $question->id = Str::uuid()->toString();
-    //     });
 
     //     // static::deleted(function (Question $question) {
     //     //     $question->choices->each->delete();

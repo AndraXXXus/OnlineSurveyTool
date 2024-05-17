@@ -23,7 +23,7 @@ class TeamFactory extends Factory
     public function definition()
     {
         return [
-            'id' => Uuid::uuid4(),
+            // 'id' => Uuid::uuid4(),
             'team_name' => $this->faker->company,
         ];
     }

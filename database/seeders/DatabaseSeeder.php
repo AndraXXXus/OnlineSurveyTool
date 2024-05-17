@@ -31,7 +31,6 @@ class DatabaseSeeder extends Seeder
         $users = [];
 
         for ($i = 1; $i <= $num_u; $i++) {
-
             $current_user = User::factory()->create([
                 'name' => 'user_'.$i,
                 'email' => 'user'.$i.'@user.com',
@@ -41,7 +40,6 @@ class DatabaseSeeder extends Seeder
 
         for ($i = 0; $i <$num_u; $i++) {
             $current_user_id = $users[$i];
-
             $current_team = Team::factory()->create([
                 'team_name' => 'team_'.$i,
                 'user_id' => $current_user_id,
@@ -50,7 +48,6 @@ class DatabaseSeeder extends Seeder
 
             $next_user_id = $users[($i+1)%$num_u];
             $current_team->members()->attach($next_user_id, ['status' => 'accepted']);
-
 
             $next_user_id = $users[($i+2)%$num_u];
             $current_team->members()->attach($next_user_id, ['status' => 'pending']);
