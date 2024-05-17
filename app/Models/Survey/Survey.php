@@ -11,12 +11,14 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Models\User;
 use App\Models\Team\Team;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
 class Survey extends Model
 {
     use HasFactory, SoftDeletes;
-    protected $keyType = 'string';
-    public $incrementing = false;
+    use HasUuids;
+    // protected $keyType = 'string';
+    // public $incrementing = false;
 
     protected $fillable = [
     'user_id',
@@ -53,31 +55,31 @@ class Survey extends Model
         return 'id';
     }
 
-    protected static function booted(): void
-    {
-        parent::boot();
+    // protected static function booted(): void
+    // {
+    //     parent::boot();
 
-        static::creating(function (Survey $survey) {
-            $survey->id = Str::uuid()->toString();
-        });
+    //     static::creating(function (Survey $survey) {
+    //         $survey->id = Str::uuid()->toString();
+    //     });
 
-        // static::deleted(function (Survey $survey) {
-        //     $survey->questions->each->delete();
-        // });
+    //     // static::deleted(function (Survey $survey) {
+    //     //     $survey->questions->each->delete();
+    //     // });
 
 
-        // static::restoring(function(Survey $survey) {
-        //     $deleted_at = $survey->deleted_at;
+    //     // static::restoring(function(Survey $survey) {
+    //     //     $deleted_at = $survey->deleted_at;
 
-        //     $survey->questions()->onlyTrashed()
-        //     ->where('deleted_at', '>=', $deleted_at)
-        //     ->get()
-        //     ->each(function ($question) {
-        //         $question->restore();
-        //     });
-        // });
+    //     //     $survey->questions()->onlyTrashed()
+    //     //     ->where('deleted_at', '>=', $deleted_at)
+    //     //     ->get()
+    //     //     ->each(function ($question) {
+    //     //         $question->restore();
+    //     //     });
+    //     // });
 
-    }
+    // }
     public function deepCopySurvey() {
         $new_survey = $this->replicate();
         $new_survey->survey_title = $new_survey->survey_title;

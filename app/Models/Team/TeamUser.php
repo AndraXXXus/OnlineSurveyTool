@@ -10,7 +10,6 @@ use App\Models\Team\Team;
 class TeamUser extends Model
 {
     use HasFactory;
-
     protected $primaryKey = ['user_id', 'team_id'];
     public $incrementing = false;
 

@@ -9,15 +9,16 @@ use Illuminate\Support\Str;
 use App\Models\Team\Team;
 use App\Models\Survey\Survey;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 class User extends Authenticatable
 {
     use Notifiable;
     use HasApiTokens;
     use HasFactory;
+    use HasUuids;
 
-
-    protected $keyType = 'string';
-    public $incrementing = false;
+    // protected $keyType = 'string';
+    // public $incrementing = false;
     /**
      * The attributes that are mass assignable.
      *
@@ -86,9 +87,9 @@ class User extends Authenticatable
     {
         parent::boot();
 
-        static::creating(function (User $user) {
-            $user->id = Str::uuid()->toString();
-        });
+        // static::creating(function (User $user) {
+        //     $user->id = Str::uuid()->toString();
+        // });
 
         static::created(function (User $user) {
             $team = Team::factory()->create([

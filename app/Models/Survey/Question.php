@@ -7,13 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
 
 class Question extends Model
 {
+    use HasUuids;
     use HasFactory, SoftDeletes;
-    protected $keyType = 'string';
-    public $incrementing = false;
+    // protected $keyType = 'string';
+    // public $incrementing = false;
 
     protected static $allowedQuestionTypes = ["radio-button","mutiple-choice","dropp-down","open"];
 
@@ -95,29 +97,29 @@ class Question extends Model
         'question_type'=> 'string',
     ];
 
-    protected static function booted(): void
-    {
-        parent::boot();
+    // protected static function booted(): void
+    // {
+    //     parent::boot();
 
-        static::creating(function (Question $question) {
-            $question->id = Str::uuid()->toString();
-        });
+    //     static::creating(function (Question $question) {
+    //         $question->id = Str::uuid()->toString();
+    //     });
 
-        // static::deleted(function (Question $question) {
-        //     $question->choices->each->delete();
-        // });
+    //     // static::deleted(function (Question $question) {
+    //     //     $question->choices->each->delete();
+    //     // });
 
-        // static::restoring(function(Question $question) {
-        //     $deleted_at = $question->deleted_at;
+    //     // static::restoring(function(Question $question) {
+    //     //     $deleted_at = $question->deleted_at;
 
-        //     $question->choices()
-        //         ->onlyTrashed()->where('deleted_at', '>=', $deleted_at)
-        //         ->get()
-        //         ->each(function ($choice) {
-        //             $choice->restore();
-        //         });
-        // });
-    }
+    //     //     $question->choices()
+    //     //         ->onlyTrashed()->where('deleted_at', '>=', $deleted_at)
+    //     //         ->get()
+    //     //         ->each(function ($choice) {
+    //     //             $choice->restore();
+    //     //         });
+    //     // });
+    // }
 
     public function deepCopyQuestion(Survey $new_survey) {
         $new_question = $this->replicate(['survey_id', 'question_position']);

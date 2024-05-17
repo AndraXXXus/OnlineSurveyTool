@@ -6,13 +6,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
 class Choice extends Model
 {
+    use HasUuids;
     use HasFactory, SoftDeletes;
     protected $touches = ['question'];
-    protected $keyType = 'string';
-    public $incrementing = false;
+    // protected $keyType = 'string';
+    // public $incrementing = false;
 
     protected $fillable = [
     'question_id',
@@ -62,15 +64,15 @@ class Choice extends Model
         return $this->question->survey->deleted_at === null;
     }
 
-    protected static function booted(): void
-    {
-        parent::boot();
+    // protected static function booted(): void
+    // {
+    //     parent::boot();
 
-        static::creating(function (Choice $choice) {
-            $choice->id = Str::uuid()->toString();
-        });
+    //     static::creating(function (Choice $choice) {
+    //         $choice->id = Str::uuid()->toString();
+    //     });
 
-    }
+    // }
 
 
 }

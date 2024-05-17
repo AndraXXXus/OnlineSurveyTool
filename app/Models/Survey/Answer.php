@@ -5,13 +5,15 @@ namespace App\Models\Survey;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
-
+use App\Traits\Uuid;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
 class Answer extends Model
 {
+    use HasUuids;
     use HasFactory;
-    protected $keyType = 'string';
-    public $incrementing = false;
+    // protected $keyType = 'string';
+    // public $incrementing = false;
 
     protected $fillable = [
     'answer_text',
@@ -43,14 +45,14 @@ class Answer extends Model
     }
 
 
-    protected static function booted(): void
-    {
-        parent::boot();
+    // protected static function booted(): void
+    // {
+    //     parent::boot();
 
-        static::creating(function (Answer $answer) {
-            $answer->id = Str::uuid()->toString();
-        });
-    }
+    //     static::creating(function (Answer $answer) {
+    //         $answer->id = Str::uuid()->toString();
+    //     });
+    // }
 
 
 }

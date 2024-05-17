@@ -9,12 +9,14 @@ use App\Models\Survey\Survey;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
+;
 class Team extends Model
 {
     use HasFactory, SoftDeletes;
-    protected $keyType = 'string';
-    public $incrementing = false;
+    use HasUuids;
+    // protected $keyType = 'string';
+    // public $incrementing = false;
 
     protected $fillable = [
         'team_name',
@@ -49,9 +51,9 @@ class Team extends Model
     {
         parent::boot();
 
-        static::creating(function (Team $team) {
-            $team->id = Str::uuid()->toString();
-        });
+        // static::creating(function (Team $team) {
+        //     $team->id = Str::uuid()->toString();
+        // });
 
         static::deleted(function (Team $team) {
             $team->surveys->each->delete();
