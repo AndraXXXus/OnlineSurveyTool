@@ -68,7 +68,7 @@ class SurveyController extends Controller
             $survey->save();
         }
         Session::flash('survey_created', $survey);
-        return redirect()->route('questions.show', ['survey' => $survey]);
+        return redirect()->route('questions.index', ['survey' => $survey]);
     }
 
     public function edit(Survey $survey)
@@ -113,7 +113,7 @@ class SurveyController extends Controller
 
         Session::flash('survey_updated', $survey);
 
-        return redirect()->route('questions.show', ['survey' => $survey]);
+        return redirect()->route('questions.index', ['survey' => $survey]);
     }
 
 
@@ -127,7 +127,7 @@ class SurveyController extends Controller
 
         Session::flash('survey_restored', $survey);
 
-        return redirect()->route('questions.show', ['survey' => $survey]);
+        return redirect()->route('questions.index', ['survey' => $survey]);
     }
 
     public function destroy(Survey $survey)

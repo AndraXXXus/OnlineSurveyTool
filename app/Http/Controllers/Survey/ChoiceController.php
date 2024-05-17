@@ -19,7 +19,7 @@ class ChoiceController extends Controller
         $this->middleware('auth');
     }
 
-    public function show(Survey $survey, Question $question)
+    public function index(Survey $survey, Question $question)
     {
         if($question->survey != $survey){
             return abort(403, "Survey and question do not match");
@@ -65,7 +65,7 @@ class ChoiceController extends Controller
 
         Session::flash('choice_created');
 
-        return redirect()->route('survey.question.show', ['survey' => $survey, 'question' => $question]);
+        return redirect()->route('survey.question.index', ['survey' => $survey, 'question' => $question]);
     }
 
     public function edit(Choice $choice)
@@ -103,7 +103,7 @@ class ChoiceController extends Controller
 
         Session::flash('choice_updated');
 
-        return redirect()->route('survey.question.show', ['survey' => $survey, 'question' => $question]);
+        return redirect()->route('survey.question.index', ['survey' => $survey, 'question' => $question]);
     }
 
     public function destroy(Choice $choice)
@@ -137,7 +137,7 @@ class ChoiceController extends Controller
 
         Session::flash('choice_deleted');
         //return redirect()->route('choices.show',['question' => $question]);
-        return redirect()->route('survey.question.show', ['survey' => $survey, 'question' => $question]);
+        return redirect()->route('survey.question.index', ['survey' => $survey, 'question' => $question]);
     }
 
 
@@ -156,7 +156,7 @@ class ChoiceController extends Controller
 
         Session::flash('chioce_restored');
 
-        return redirect()->route('survey.question.show', ['survey' => $survey, 'question' => $question]);
+        return redirect()->route('survey.question.index', ['survey' => $survey, 'question' => $question]);
     }
 
     public function movechoice(Choice $choice, String $up_or_down){
@@ -196,7 +196,7 @@ class ChoiceController extends Controller
             $choice_to_be_pushed->save();
         }
 
-        return redirect()->route('survey.question.show', ['survey' => $survey, 'question' => $question]);
+        return redirect()->route('survey.question.index', ['survey' => $survey, 'question' => $question]);
     }
 
     public function moveup(Choice $choice){
@@ -220,7 +220,7 @@ class ChoiceController extends Controller
         }
 
         Session::flash('choice_forcedeleted');
-        return redirect()->route('survey.question.show', ['survey' => $survey, 'question' => $question]);
+        return redirect()->route('survey.question.index', ['survey' => $survey, 'question' => $question]);
     }
 
 }

@@ -9,7 +9,7 @@
         @else
             <p class="mb-2">You can add a new Question here.</p>
         @endif
-        @include('surveys.questions.partials.buttons.to_questions',['base_route'=>'questions.show'])
+        @include('surveys.questions.partials.buttons.to_questions',['base_route'=>'questions.index'])
     </div>
 
     <div x-data="{show: true}" x-init="setTimeout(() => show = false, 10000)" x-show="show">

@@ -21,7 +21,7 @@ class QuestionController extends Controller
         $this->middleware('auth');
     }
 
-    public function show(Survey $survey)
+    public function index(Survey $survey)
     {
         $user = User::findOrFail(Auth::id());
 
@@ -29,7 +29,7 @@ class QuestionController extends Controller
 
         $questions = $survey->questions->sortBy('question_position');
 
-        return view('surveys.questions.show')->with(['survey' => $survey,'questions'=>$questions]);
+        return view('surveys.questions.index')->with(['survey' => $survey,'questions'=>$questions]);
     }
 
     public function archive(Survey $survey)
@@ -40,7 +40,7 @@ class QuestionController extends Controller
 
         $archive=true;
         $questions = $survey->questions()->onlyTrashed()->orderBy('deleted_at', 'DESC')->get();
-        return view('surveys.questions.show')->with(['survey' => $survey,'questions'=>$questions,'archive'=>$archive]);
+        return view('surveys.questions.index')->with(['survey' => $survey,'questions'=>$questions,'archive'=>$archive]);
 
     }
 
@@ -106,7 +106,7 @@ class QuestionController extends Controller
         }
 
         Session::flash('question_created', $question);
-        return redirect()->route('survey.question.show', ['survey' => $survey, 'question' => $question]);
+        return redirect()->route('survey.question.index', ['survey' => $survey, 'question' => $question]);
     }
 
     public function update(CreateOrUpdateQuestionRequest $request, Question $question)
@@ -163,7 +163,7 @@ class QuestionController extends Controller
         Session::flash('question_updated', $question);
 
 
-        return redirect()->route('survey.question.show', ['survey' => $survey, 'question' => $question]);
+        return redirect()->route('survey.question.index', ['survey' => $survey, 'question' => $question]);
     }
 
     public function movequestion(Question $question, String $up_or_down){
@@ -200,7 +200,7 @@ class QuestionController extends Controller
             $question_to_be_pushed->save();
         }
 
-        return redirect()->route('questions.show', ['survey' => $survey]);
+        return redirect()->route('questions.index', ['survey' => $survey]);
     }
 
     public function moveup(Question $question){
@@ -239,7 +239,7 @@ class QuestionController extends Controller
         });
 
         Session::flash('question_deleted', $question);
-        return redirect()->route('questions.show',['survey' => $survey]);
+        return redirect()->route('questions.index',['survey' => $survey]);
     }
 
 
@@ -256,7 +256,7 @@ class QuestionController extends Controller
 
         Session::flash('question_restored', $question);
 
-        return redirect()->route('questions.show', ['survey' => $survey]);
+        return redirect()->route('questions.index', ['survey' => $survey]);
     }
 
 
@@ -279,7 +279,7 @@ class QuestionController extends Controller
         }
 
         Session::flash('question_forcedeleted', $question);
-        return redirect()->route('questions.show',['survey' => $survey]);
+        return redirect()->route('questions.index',['survey' => $survey]);
     }
 
     public function clone(Question $question){
@@ -288,7 +288,7 @@ class QuestionController extends Controller
 
         $question->deepCopyQuestion($survey);
 
-        return redirect()->route('questions.show',['survey' => $survey]);
+        return redirect()->route('questions.index',['survey' => $survey]);
     }
 }
 

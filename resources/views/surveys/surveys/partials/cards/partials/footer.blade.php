@@ -11,7 +11,7 @@
     </div>
 @else
     <div class="d-flex flex-row justify-content-between">
-        @include('surveys.surveys.partials.buttons.details',['base_route'=>'questions.show'])
+        @include('surveys.surveys.partials.buttons.details',['base_route'=>'questions.index'])
         @include('surveys.surveys.partials.buttons.golive',['base_route'=>'surveys.golive'])
 
     </div>

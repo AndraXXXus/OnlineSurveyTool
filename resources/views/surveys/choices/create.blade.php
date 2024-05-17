@@ -9,7 +9,7 @@
         @else
             <p class="mb-2">You can add a new Choice here.</p>
         @endisset
-        @include('surveys.choices.partials.buttons.to_choices',['base_route'=>'survey.question.show'])
+        @include('surveys.choices.partials.buttons.to_choices',['base_route'=>'survey.question.index'])
     </div>
     @isset($choice)
     <form action="{{ route('choices.update', ['choice' => $choice]) }}" method="POST" enctype="multipart/form-data">

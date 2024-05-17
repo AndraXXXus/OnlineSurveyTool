@@ -69,10 +69,10 @@
             <div class="d-flex justify-content-end gap-3">
             @if(!isset($archive))
                 @include('surveys.choices.partials.buttons.create',['base_route'=>'choices.create'])
-                @include('surveys.choices.partials.buttons.to_questions',['base_route'=>'questions.show'])
+                @include('surveys.choices.partials.buttons.to_questions',['base_route'=>'questions.index'])
                 @include('surveys.choices.partials.buttons.to_archives',['base_route'=>'choices.archive'])
             @else
-                @include('surveys.choices.partials.buttons.to_choices',['base_route'=>'survey.question.show'])
+                @include('surveys.choices.partials.buttons.to_choices',['base_route'=>'survey.question.index'])
             @endif
         </div>
     </div>

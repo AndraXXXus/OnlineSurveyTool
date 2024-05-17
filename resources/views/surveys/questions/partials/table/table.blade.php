@@ -70,7 +70,7 @@
 
                             <td> @include('surveys.questions.partials.buttons.move.moveup') </td>
                             <td> @include('surveys.questions.partials.buttons.move.movedown') </td>
-                            <td> @include('surveys.questions.partials.buttons.answers',['base_route'=>'survey.question.show']) </td>
+                            <td> @include('surveys.questions.partials.buttons.answers',['base_route'=>'survey.question.index']) </td>
 
                             <td> @include('surveys.questions.partials.buttons.edit',['base_route'=>'questions.edit'])</td>
                             <td> @include('surveys.questions.partials.buttons.clone',['base_route'=>'questions.clone'])</td>

@@ -48,7 +48,7 @@
                     @include('surveys.questions.partials.buttons.to_surveys',['base_route'=>'surveys.index'])
                     @include('surveys.questions.partials.buttons.to_archives',['base_route'=>'questions.archive'])
                 @else
-                    @include('surveys.questions.partials.buttons.to_questions',['base_route'=>'questions.show'])
+                    @include('surveys.questions.partials.buttons.to_questions',['base_route'=>'questions.index'])
                 @endif
             </div>
         </div>

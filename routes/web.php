@@ -45,8 +45,8 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('surveys/choices/archive/{question}', [ChoiceController::class, 'archive'])->name('choices.archive',);
 
     //show
-    Route::get('surveys/survey/{survey}/questions/{question}', [ChoiceController::class, 'show'])->name('survey.question.show');
-    Route::get('surveys/survey/{survey}/questions/', [QuestionController::class, 'show'])->name('questions.show');
+    Route::get('surveys/survey/{survey}/questions/{question}', [ChoiceController::class, 'index'])->name('survey.question.index');
+    Route::get('surveys/survey/{survey}/questions/', [QuestionController::class, 'index'])->name('questions.index');
     Route::get('/stats/show/{survey}', [StatsController::class, 'show'])->name('stats.show');
 
     //create
