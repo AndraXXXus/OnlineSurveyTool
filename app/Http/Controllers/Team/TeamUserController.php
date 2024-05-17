@@ -69,7 +69,7 @@ class TeamUserController extends Controller
 
             return redirect()->back()->with('success', 'Team invitation successfully accepted: ' . $team->team_name);
         }else{
-            return redirect()->back()->with('warning', 'Team deleted or invitation has been withdrawn: ' . $team->team_name);
+            return redirect()->back()->with('warning', 'Team archived/deleted or invitation has been withdrawn: ' . $team->team_name);
         }
 
     }
@@ -78,7 +78,7 @@ class TeamUserController extends Controller
     public function decline(Team $team)
     {
         if($team===null){
-            return redirect()->back()->with('warning', "Team has been delelted");
+            return redirect()->back()->with('warning', "Team has been archived or deleted");
         }
 
         $user_id = Auth::id();

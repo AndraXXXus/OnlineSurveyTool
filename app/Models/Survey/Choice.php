@@ -52,7 +52,6 @@ class Choice extends Model
         $new_choice = $this->replicate(['question_id']);
         $new_choice->question_id = $new_question->id;
         $new_choice->save();
-
     }
 
     public function parentQuestionIsSoftDeleted(){
