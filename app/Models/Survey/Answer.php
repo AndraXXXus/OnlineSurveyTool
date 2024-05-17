@@ -24,10 +24,10 @@ class Answer extends Model
     'question_started_at'
     ];
 
-    public function getRouteKeyName()
-    {
-        return 'id';
-    }
+    // public function getRouteKeyName()
+    // {
+    //     return 'id';
+    // }
 
     public function question()
     {

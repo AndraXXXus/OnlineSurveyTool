@@ -50,10 +50,10 @@ class Survey extends Model
         return $this->belongsTo(Team::class);
     }
 
-    public function getRouteKeyName()
-    {
-        return 'id';
-    }
+    // public function getRouteKeyName()
+    // {
+    //     return 'id';
+    // }
 
     // protected static function booted(): void
     // {

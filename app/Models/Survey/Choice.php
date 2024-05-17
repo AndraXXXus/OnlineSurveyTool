@@ -23,10 +23,10 @@ class Choice extends Model
     'cover_image_path',
     ];
 
-    public function getRouteKeyName()
-    {
-        return 'id';
-    }
+    // public function getRouteKeyName()
+    // {
+    //     return 'id';
+    // }
 
     protected $casts = [
         'choice_position' => 'integer',

@@ -21,10 +21,10 @@ class Question extends Model
 
     protected $touches = ['survey'];
 
-    public function getRouteKeyName()
-    {
-        return 'id';
-    }
+    // public function getRouteKeyName()
+    // {
+    //     return 'id';
+    // }
 
     public function setQuestionTypeAttribute($value)
     {
