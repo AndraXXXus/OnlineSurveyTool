@@ -119,8 +119,8 @@ Route::group(['middleware' => ['auth']], function() {
 
     //rest
     Route::resource('surveys', SurveyController::class)->except(['restore','update','create','golive']);
-    Route::resource('questions', QuestionController::class)->except(['show','create','store','update']);
-    Route::resource('choices', ChoiceController::class)->except(['show','create','store','update']);
+    Route::resource('questions', QuestionController::class)->except(['index','show','create','store','update']);
+    Route::resource('choices', ChoiceController::class)->except(['index','show','create','store','update']);
     Route::resource('questionnaires', QuestionnaireController::class)->except(['show','store','edit','create','destroy','update','back2theDrawingBoard','startQuestionnaire']);
     Route::resource('profile', ProfileController::class)->except(['update','changepassword','destroy']);
     Route::resource('teamuser', TeamUserController::class);

@@ -27,7 +27,7 @@ class ChoiceController extends Controller
         $this->authorize('surveyAndUserMatch', $survey);
 
         $choices = $question->choices->whereNull('deleted_at')->sortBy('choice_position');
-        return view('surveys.choices.show')->with(['survey' => $survey,'question'=>$question ,'choices' => $choices]);
+        return view('surveys.choices.index')->with(['survey' => $survey,'question'=>$question ,'choices' => $choices]);
     }
 
     public function archive(Question $question)
@@ -38,7 +38,7 @@ class ChoiceController extends Controller
 
         $archive = true;
 
-        return view('surveys.choices.show')->with(['survey' => $survey,'question'=>$question ,'choices' => $choices , 'archive' => $archive]);
+        return view('surveys.choices.index')->with(['survey' => $survey,'question'=>$question ,'choices' => $choices , 'archive' => $archive]);
     }
 
     public function create(Question $question)
