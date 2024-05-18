@@ -27,15 +27,23 @@ class SurveyPolicy
     public function userIsMemberInSurveysTeam(User $user, Survey $survey){
         return $survey->team->members->pluck('id')->contains($user->id);
     }
+
     public function surveyAndUserMatch(User $user, Survey $survey){
         return ($this->isLeagalUnpublishedSurvey($user, $survey) && $survey->user_id === $user->id && $this->userIsMemberInSurveysTeam($user, $survey));
+    }
+
+    public function surveyAndUserMatchOrIsAdmin(User $user, Survey $survey){
+        return (($survey->user_id === $user->id ||$survey->team->user_id === $user->id ) && $this->userIsMemberInSurveysTeam($user, $survey));
     }
 
 
     public function questionnaireTeamMembersAndUserMatch(User $user, Survey $survey){
         return $this->isLeagalQuestionnaire($user, $survey) && $this->userIsMemberInSurveysTeam($user, $survey);
     }
-    public function questionnaireTeamOwnerAndUserMatch(User $user, Survey $survey){
-        return ($this->isLeagalQuestionnaire($user, $survey) && $survey->team->user_id === $user->id);
+    public function questionnaireTeamMembersAndUserMatchOrIsAdmin(User $user, Survey $survey){
+        return $this->isLeagalQuestionnaire($user, $survey) && $this->surveyAndUserMatchOrIsAdmin($user, $survey);
     }
+    // public function questionnaireTeamOwnerAndUserMatch(User $user, Survey $survey){
+    //     return ($this->isLeagalQuestionnaire($user, $survey) && $survey->team->user_id === $user->id);
+    // }
 }

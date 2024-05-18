@@ -37,7 +37,7 @@ class QuestionnaireController extends Controller
 
     public function destroy(Survey $survey)
     {
-        $this->authorize('questionnaireTeamOwnerAndUserMatch',$survey);
+        $this->authorize('questionnaireTeamMembersAndUserMatchOrIsAdmin',$survey);
 
         $deleted = $survey->delete();
         if (!$deleted) {
@@ -51,9 +51,9 @@ class QuestionnaireController extends Controller
     public function restore(String $survey)
     {
         $user = User::findOrFail(Auth::id());
-        $survey = $user->questionarries()->onlyTrashed()->findOrFail($survey);
+        $survey = Survey::withTrashed()->findOrFail($survey);
 
-        $this->authorize('questionnaireTeamMembersAndUserMatch',$survey);
+        $this->authorize('questionnaireTeamMembersAndUserMatchOrIsAdmin',$survey);
 
         $survey->restore();
 
@@ -74,8 +74,8 @@ class QuestionnaireController extends Controller
 
     public function forcedelete(String $survey)
     {
-        $survey = Survey::withTrashed()->where('user_id',Auth::user()->id)->findOrFail($survey);
-        $this->authorize('questionnaireTeamOwnerAndUserMatch', $survey);
+        $survey = Survey::withTrashed()->findOrFail($survey);
+        $this->authorize('questionnaireTeamMembersAndUserMatchOrIsAdmin', $survey);
 
         //$this->authorize('delete', $survey);
 

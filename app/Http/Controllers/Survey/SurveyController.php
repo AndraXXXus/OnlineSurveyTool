@@ -146,7 +146,7 @@ class SurveyController extends Controller
     public function golive(Survey $survey){
         $this->authorize('surveyAndUserMatch', $survey);
 
-        $survey->user_id = $survey->team->user_id;
+        // $survey->user_id = $survey->team->user_id;
         $survey->questionnaire_id = Uuid::uuid4();
         $survey->deepCopySurvey();
 
