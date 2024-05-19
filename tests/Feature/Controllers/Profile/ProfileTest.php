@@ -14,6 +14,6 @@ class ProfileTest extends TestCase
      */
     public function test_example()
     {
-        ProfileController::;
+        $response = $this->get('/profile');
     }
 }
