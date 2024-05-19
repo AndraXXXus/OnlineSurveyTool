@@ -40,7 +40,7 @@ class SurveyPolicy
     public function questionnaireTeamMembersAndUserMatch(User $user, Survey $survey){
         return $this->isLeagalQuestionnaire($user, $survey) && $this->userIsMemberInSurveysTeam($user, $survey);
     }
-    public function questionnaireTeamMembersAndUserMatchOrIsAdmin(User $user, Survey $survey){
+    public function questionnaireOwnerAndUserMatchOrIsAdmin(User $user, Survey $survey){
         return $this->isLeagalQuestionnaire($user, $survey) && $this->surveyAndUserMatchOrIsAdmin($user, $survey);
     }
     // public function questionnaireTeamOwnerAndUserMatch(User $user, Survey $survey){

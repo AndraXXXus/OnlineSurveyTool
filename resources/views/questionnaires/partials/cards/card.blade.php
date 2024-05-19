@@ -4,7 +4,7 @@
             @if(!isset($archive))
                 <div class="d-flex items-center gap-2 justify-content-end">
                     @include('questionnaires.partials.buttons.getreplica')
-                    @can('questionnaireTeamMembersAndUserMatchOrIsAdmin',$survey)
+                    @can('questionnaireOwnerAndUserMatchOrIsAdmin',$survey)
                     @include('questionnaires.partials.buttons.archive')
                     @endcan
                 </div>
@@ -46,7 +46,7 @@
             <div class="d-flex flex-row justify-content-between">
                 @if(isset($archive))
                     @include('questionnaires.partials.buttons.restore')
-                    @can('questionnaireTeamMembersAndUserMatchOrIsAdmin',$survey)
+                    @can('questionnaireOwnerAndUserMatchOrIsAdmin',$survey)
                     @include('questionnaires.partials.buttons.forcedelete')
                     @endcan
                 @else
