@@ -48,6 +48,7 @@ class SurveyController extends Controller
         $data['team_id'] = $request->input('team_id');
         $data['survey_title'] = $request->input('survey_title');
         $data['survey_description'] = $request->input('survey_description');
+        $data['team_message'] = $request->input('team_message');
 
         $data['deleted_at'] = null;
         $data['user_id'] = Auth::id();
@@ -86,6 +87,7 @@ class SurveyController extends Controller
         $survey->team_id = $request->input('team_id');
         $survey->survey_title =  $request->input('survey_title');
         $survey->survey_description = $request->input('survey_description');
+        $survey->team_message = $request->input('team_message');
 
         $team = Team::findOrFail($survey->team_id);
         $this->authorize('userIsTeamMember', $team);

@@ -21,6 +21,7 @@ class SurveyFactory extends Factory
             // 'id' => Uuid::uuid4(),
             'survey_title' => $this->faker->sentence(),
             'survey_description' => $this->faker->paragraphs(1, true),
+            'team_message' => $this->faker->paragraphs(1, true),
             'cover_image_path' => null,
             'questionnaire_id' => null,
         ];

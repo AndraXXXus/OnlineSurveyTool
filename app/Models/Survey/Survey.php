@@ -25,7 +25,8 @@ class Survey extends Model
     'cover_image_path',
     'questionnaire_id',
     'user_id',
-    'team_id'
+    'team_id',
+    'team_message',
     ];
 
     public function questions()

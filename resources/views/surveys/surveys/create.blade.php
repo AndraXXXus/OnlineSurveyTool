@@ -93,6 +93,24 @@
             </div>
         </div>
 
+        <div class="form-group row mb-3">
+            <label for="team_message" class="col-sm-2 col-form-label">Team Massage</label>
+            <div class="col-sm-10">
+                <input
+                    type="text"
+                    class="form-control @error('team_message') is-invalid @enderror"
+                    id="team_message"
+                    name="team_message"
+                    value="{{ old('team_message', isset($survey) ? $survey->team_message : '') }}">
+
+                @error('team_message')
+                <span class="text-danger d-block" role="alert">
+                    {{ $message }}
+                </span>
+                @enderror
+            </div>
+        </div>
+
         @if(isset($survey) && isset($survey->cover_image_path))
             @include('components.image_form.edit',['cover_image_path'=>$survey->cover_image_path])
         @else
