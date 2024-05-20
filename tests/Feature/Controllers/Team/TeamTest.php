@@ -115,6 +115,7 @@ class TeamTest extends TestCase
         ]);
     }
 
+    //php artisan test --coverage --migrate-configuration
 
     public function test_team_archive_and_restore()
     {
