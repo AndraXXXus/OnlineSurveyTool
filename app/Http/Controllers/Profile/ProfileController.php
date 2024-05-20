@@ -22,7 +22,7 @@ class ProfileController extends Controller
 
     public function index()
     {
-        $user = Auth::user();
+        $user = User::findOrFail(Auth::id());
         return view('profile.index')->with(['user' => $user]);
     }
 
@@ -31,7 +31,7 @@ class ProfileController extends Controller
         $user = User::findOrFail(Auth::id());
 
         if ($user->teams_owned_withArchived()->count()>0){
-            return redirect()->back()->with('danger', 'Deleting user only possible if you are no longer own any team(s)!');
+            return redirect()->back()->with('danger', 'Deleting user only possible if you are no longer own any (archived) team(s)!');
         }
 
         $user->teams()->withTrashed()->each(function (Team $team) {
@@ -51,10 +51,9 @@ class ProfileController extends Controller
         return redirect('/login')->with('success', 'User Deleted Successfully!');
     }
 
-    public function update(Request $request, User $user){
-        if($user->id != Auth::id()){
-            return abort(403);
-        }
+    public function update(Request $request){
+        $user = User::findOrFail(Auth::id());
+
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
         ]);
@@ -64,10 +63,9 @@ class ProfileController extends Controller
         return redirect()->back()->with('success', 'User Name Updated Successfully');
     }
 
-    public function changepassword(Request $request, User $user){
-        if($user->id != Auth::id()){
-            return abort(403);
-        }
+    public function changepassword(Request $request){
+        $user = User::findOrFail(Auth::id());
+
         $data = $request->validate([
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);

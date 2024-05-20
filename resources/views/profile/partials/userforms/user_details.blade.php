@@ -1,4 +1,4 @@
-<form method="POST" action="{{ route('profile.update', ['user' => $user])}}" enctype="multipart/form-data">
+<form method="POST" action="{{ route('profile.update')}}" enctype="multipart/form-data">
     @method('put')
     @csrf
 

@@ -1,4 +1,4 @@
-<form method="POST" action="{{ route('profile.changepassword', ['user' => $user])}}" enctype="multipart/form-data">
+<form method="POST" action="{{ route('profile.changepassword')}}" enctype="multipart/form-data">
     @method('put')
     @csrf
 

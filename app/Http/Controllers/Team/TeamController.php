@@ -97,6 +97,10 @@ class TeamController extends Controller
 
         $this->authorize('isUserTeamLeader', $team);
 
+
+        $team->invitations()->detach();
+        $team->members()->detach();
+
         $forcedelete = $team->forceDelete();
 
         if (!$forcedelete) {

@@ -1,6 +1,6 @@
 
 @php
-        $route = route('team.destroy',$team);
+        $route = route('team.destroy',['team' => $team]);
         $button_id = 'delete_team_'.$team->id;
         $text = 'Archive Team and all surveys attached to it';
         $title = 'Archive Team and all surveys attached to it';

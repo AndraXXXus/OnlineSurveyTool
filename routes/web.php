@@ -104,13 +104,13 @@ Route::group(['middleware' => ['auth']], function() {
     Route::put('teamuser/{team}/kick/{user}', [TeamUserController::class, 'kick'])->name('teamuser.kick');
 
     //user
-    Route::put('profile/update/{user}', [ProfileController::class, 'update'])->name('profile.update');
-    Route::put('profile/changepassword/{user}', [ProfileController::class, 'changepassword'])->name('profile.changepassword');
+    Route::put('profile/update/', [ProfileController::class, 'update'])->name('profile.update');
+    Route::put('profile/changepassword/', [ProfileController::class, 'changepassword'])->name('profile.changepassword');
     Route::delete('profile/destroy/', [ProfileController::class, 'destroy'])->name('profile.destroy');
     //teamowned
 
     Route::put('team/giveawayteamleadership/{team}', [TeamController::class, 'giveawayteamleadership'])->name('team.giveawayteamleadership');
-    Route::delete('team/destory/{team}', [TeamController::class, 'destory'])->name('team.destory');
+    Route::delete('team/destroy/{team}', [TeamController::class, 'destroy'])->name('team.destroy');
     Route::put('team/update/{team}', [TeamController::class, 'update'])->name('team.update');
     Route::post('team/store/', [TeamController::class, 'store'])->name('team.store');
     Route::get('team/archived/', [TeamController::class, 'archived'])->name('team.archived');
@@ -124,7 +124,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('questionnaires', QuestionnaireController::class)->except(['show','store','edit','create','destroy','update','back2theDrawingBoard','startQuestionnaire']);
     Route::resource('profile', ProfileController::class)->except(['update','changepassword','destroy']);
     Route::resource('teamuser', TeamUserController::class);
-    Route::resource('team', TeamController::class)->except(['update','store']);
+    Route::resource('team', TeamController::class)->except(['update','destroy','store']);
 
 });
 
