@@ -170,6 +170,9 @@ class TeamTest extends TestCase
         $response = $this->actingAs($this->user)->delete('/team/destroy/'.$this->team->id);
         $response->assertStatus(302);
 
+        $response = $this->actingAs($this->user)->delete('/team/destroy/'.$this->team->id);
+        $response->assertStatus(404);
+
         assertTrue(Team::onlyTrashed()->findOrFail($team_id)->deleted_at != null);
         assertTrue(Survey::onlyTrashed()->findOrFail($survey_id)->deleted_at != null);
 
@@ -232,6 +235,9 @@ class TeamTest extends TestCase
 
         $response = $this->actingAs($this->user)->delete('/team/forcedelete/'.$this->team->id);
         $response->assertStatus(302);
+
+        $response = $this->actingAs($this->user)->delete('/team/forcedelete/'.$this->team->id);
+        $response->assertStatus(404);
 
         assertNull(Team::onlyTrashed()->find($team_id));
         assertNull(Survey::onlyTrashed()->find($survey_id));

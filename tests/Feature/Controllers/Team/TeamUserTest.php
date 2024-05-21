@@ -9,6 +9,9 @@ use App\Models\Team\Team;
 use App\Models\Survey\Survey;
 use Illuminate\Support\Facades\Hash;
 
+use function PHPUnit\Framework\assertFalse;
+use function PHPUnit\Framework\assertNotNull;
+use function PHPUnit\Framework\assertNull;
 use function PHPUnit\Framework\assertTrue;
 
 class TeamUserTest extends TestCase
@@ -88,6 +91,7 @@ class TeamUserTest extends TestCase
         $response->assertSessionHas('warning', "User has not yet been invited");
 
         $this->team->invitations()->attach($this->new_user_2_invite->id);
+        assertTrue($this->team->invitations->pluck('id')->contains($this->new_user_2_invite->id));
 
         $response = $this->actingAs($this->other_team_member_user)->put('/teamuser/' . $team_id . "/cancel_invitation/" . $this->new_user_2_invite->id);
         $response->assertStatus(403);
@@ -100,30 +104,153 @@ class TeamUserTest extends TestCase
         $response = $this->actingAs($this->user)->put('/teamuser/' . $team_id . "/cancel_invitation/" . $this->other_team_member_user->id);
         $response->assertStatus(302);
         $response->assertSessionHas('warning', "Invitation already accepted!");
+
+        $this->team->refresh();
+        assertFalse($this->team->invitations->pluck('id')->contains($this->new_user_2_invite->id));
     }
 
-    // public function test_team_accept_invitation()
-    // {
-    //     $team_id = $this->team->id;
-    //     $this->team->invitations()->attach($this->new_user_2_invite->id);
-    //     $response = $this->actingAs($this->new_user_2_invite)->put('/teamuser/accept/' . $team_id);
-    //     $response->assertStatus(302);
-    //     $response->assertSessionHas('warning', "Invitation already accepted!");
-    // }
+    public function test_team_accept_invitation()
+    {
+        assertFalse($this->team->invitations->pluck('id')->contains($this->new_user_2_invite->id));
+        assertFalse($this->team->members->pluck('id')->contains($this->new_user_2_invite->id));
+        $team_id = $this->team->id;
 
-    // public function test_team_decline_invitation()
-    // {
+        $response = $this->actingAs($this->new_user_2_invite)->put('/teamuser/accept/' . $team_id);
+        $response->assertStatus(302);
+        $response->assertSessionHas('warning', 'Invitation has been withdrawn or never have been sent or you already accepted');
 
-    // }
+        $this->team->invitations()->attach($this->new_user_2_invite->id);
+        $this->team->refresh();
+        assertTrue($this->team->invitations->pluck('id')->contains($this->new_user_2_invite->id));
 
-    // public function test_team_leaveTeam()
-    // {
+        $this->team->delete();
+        $this->team->refresh();
+        $response = $this->actingAs($this->new_user_2_invite)->put('/teamuser/accept/' . $team_id);
+        $response->assertStatus(404);
+        $this->team->restore();
+        $this->team->refresh();
 
-    // }
+        $response = $this->actingAs($this->other_team_member_user)->put('/teamuser/accept/' . $team_id);
+        $response->assertStatus(302);
+        $response->assertSessionHas('warning', "Invitation has been withdrawn or never have been sent or you already accepted");
 
-    // public function test_team_kick_user()
-    // {
+        $response = $this->actingAs($this->new_user_2_invite)->put('/teamuser/accept/' . $team_id);
+        $response->assertStatus(302);
+        $response->assertSessionHas('success', 'Team invitation successfully accepted');
 
-    // }
+        $this->team->refresh();
+        assertFalse($this->team->invitations->pluck('id')->contains($this->new_user_2_invite->id));
+        assertTrue($this->team->members->pluck('id')->contains($this->new_user_2_invite->id));
+    }
+
+    public function test_team_decline_invitation()
+    {
+        $team_id = $this->team->id;
+
+        $response = $this->actingAs($this->new_user_2_invite)->delete('/teamuser/decline/' . $team_id);
+        $response->assertStatus(403);
+
+        $this->team->members()->attach($this->new_user_2_invite->id);
+        assertTrue($this->team->invitations->pluck('id')->contains($this->new_user_2_invite->id));
+        $this->team->refresh();
+
+
+        $response = $this->actingAs($this->other_team_member_user)->delete('/teamuser/decline/' . $team_id);
+        $response->assertStatus(403);
+
+        $response = $this->actingAs($this->new_user_2_invite)->delete('/teamuser/decline/' . $team_id);
+        $response->assertStatus(302);
+        $response->assertSessionHas('success', 'Team invitation successfully declined');
+        assertFalse($this->team->members->pluck('id')->contains($this->new_user_2_invite->id));
+    }
+
+    public function test_team_leaveTeam()
+    {
+        $team_id = $this->team->id;
+
+        $response = $this->actingAs($this->new_user_2_invite)->delete('/teamuser/leave_team/' . $team_id);
+        $response->assertStatus(403);
+
+        $this->team->attachNewMemberWithStatusAccepted($this->new_user_2_invite);
+        $this->team->refresh();
+        assertTrue($this->team->members->pluck('id')->contains($this->new_user_2_invite->id));
+
+        $response = $this->actingAs($this->user)->delete('/teamuser/leave_team/' . $team_id);
+        $response->assertStatus(302);
+        $response->assertSessionHas('danger', 'Team leader cannot leave the team');
+
+
+        $new_editable_survey = Survey::factory()->create(['user_id' => $this->new_user_2_invite->id, 'team_id' => $this->team->id]);
+
+        $new_archived_survey = Survey::factory()->create(['user_id' => $this->new_user_2_invite->id, 'team_id' => $this->team->id]);
+        $new_archived_survey->delete();
+
+        assertTrue($new_editable_survey->user_id === $this->new_user_2_invite->id);
+        assertTrue($new_archived_survey->user_id === $this->new_user_2_invite->id);
+        assertNull($new_editable_survey->deleted_at);
+        assertNotNull($new_archived_survey->deleted_at);
+
+        $response = $this->actingAs($this->new_user_2_invite)->delete('/teamuser/leave_team/' . $team_id);
+        $response->assertStatus(302);
+        $response->assertSessionHas('success', 'Team left successfully');
+        $this->team->refresh();
+        assertFalse($this->team->members->pluck('id')->contains($this->new_user_2_invite->id));
+
+        $new_editable_survey->refresh();
+        $new_archived_survey->refresh();
+        assertFalse($new_editable_survey->user_id === $this->new_user_2_invite->id);
+        assertFalse($new_archived_survey->user_id === $this->new_user_2_invite->id);
+
+        assertTrue($new_editable_survey->user_id === $this->user->id);
+        assertTrue($new_archived_survey->user_id === $this->user->id);
+        assertNull($new_editable_survey->deleted_at);
+        assertNotNull($new_archived_survey->deleted_at);
+    }
+
+    public function test_team_kick_user()
+    {
+        $team_id = $this->team->id;
+        assertTrue($this->team->members->pluck('id')->contains($this->other_team_member_user->id));
+
+        $response = $this->actingAs($this->other_team_member_user)->put('/teamuser/' . $team_id . '/kick/' . $this->other_team_member_user->id);
+        $response->assertStatus(403);
+
+
+        $response = $this->actingAs($this->new_user_2_invite)->put('/teamuser/' . $team_id . '/kick/' . $this->user->id);
+        $response->assertStatus(403);
+
+        $response = $this->actingAs($this->user)->put('/teamuser/' . $team_id . '/kick/' . $this->user->id);
+        $response->assertStatus(403);
+
+        $response = $this->actingAs($this->user)->put('/teamuser/' . $team_id . '/kick/' . $this->new_user_2_invite->id);
+        $response->assertStatus(403);
+
+
+        $new_editable_survey = Survey::factory()->create(['user_id' => $this->other_team_member_user->id, 'team_id' => $this->team->id]);
+
+        $new_archived_survey = Survey::factory()->create(['user_id' => $this->other_team_member_user->id, 'team_id' => $this->team->id]);
+        $new_archived_survey->delete();
+
+        assertTrue($new_editable_survey->user_id === $this->other_team_member_user->id);
+        assertTrue($new_archived_survey->user_id === $this->other_team_member_user->id);
+        assertNull($new_editable_survey->deleted_at);
+        assertNotNull($new_archived_survey->deleted_at);
+
+        $response = $this->actingAs($this->user)->put('/teamuser/' . $team_id . '/kick/' . $this->other_team_member_user->id);
+        $response->assertStatus(302);
+        $response->assertSessionHas('success', "User Kicked Successfully");
+        $this->team->refresh();
+        assertFalse($this->team->members->pluck('id')->contains($this->other_team_member_user->id));
+
+        $new_editable_survey->refresh();
+        $new_archived_survey->refresh();
+        assertFalse($new_editable_survey->user_id === $this->other_team_member_user->id);
+        assertFalse($new_archived_survey->user_id === $this->other_team_member_user->id);
+
+        assertTrue($new_editable_survey->user_id === $this->user->id);
+        assertTrue($new_archived_survey->user_id === $this->user->id);
+        assertNull($new_editable_survey->deleted_at);
+        assertNotNull($new_archived_survey->deleted_at);
+    }
 
 }

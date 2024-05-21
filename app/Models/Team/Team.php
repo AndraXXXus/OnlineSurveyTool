@@ -45,6 +45,11 @@ class Team extends Model
         return User::findOrFail($this->user_id);
     }
 
+
+    public function attachNewMemberWithStatusAccepted(User $user){
+        return $this->members()->attach($user->id, ['status' => 'accepted']);
+    }
+
     protected static function booted(): void
     {
         parent::boot();

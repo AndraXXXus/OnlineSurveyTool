@@ -69,7 +69,7 @@ class TeamUserController extends Controller
 
             return redirect()->back()->with('success', 'Team invitation successfully accepted');
         }else{
-            return redirect()->back()->with('warning', 'Team archived/deleted or invitation has been withdrawn or never have been sent');
+            return redirect()->back()->with('warning', 'Invitation has been withdrawn or never have been sent or you already accepted');
         }
 
     }
@@ -77,23 +77,19 @@ class TeamUserController extends Controller
 
     public function decline(Team $team)
     {
-        if($team===null){
-            return redirect()->back()->with('warning', "Team has been archived or deleted");
-        }
-
         $user_id = Auth::id();
         $this->authorize('invitationBelongsToUser', $team);
 
-        if(!($team->invitations->pluck('id')->contains($user_id))){
-            redirect()->back()->with('warning', "Team invitation has been withdrawn");
-        }
-        if(($team->members->pluck('id')->contains($user_id))){
-            redirect()->back()->with('warning', "You are already a team member!");
-        }
+        // if(!($team->invitations->pluck('id')->contains($user_id))){
+        //     redirect()->back()->with('warning', "Team invitation has been withdrawn, was never sent or already accepted");
+        // }
+        // if(($team->members->pluck('id')->contains($user_id))){
+        //     redirect()->back()->with('warning', "You are already a team member!");
+        // }
 
         $team->invitations()->detach($user_id);
 
-        return redirect()->back()->with('success', 'Team invitation successfully declined ' . $team->team_name);
+        return redirect()->back()->with('success', 'Team invitation successfully declined');
     }
 
     public function leaveTeam(Team $team)
@@ -113,7 +109,7 @@ class TeamUserController extends Controller
 
         $team->members()->detach($user->id);
 
-        return redirect()->back()->with('success', 'Team: ' . $team->team_name . ' left successfully');
+        return redirect()->back()->with('success', 'Team left successfully');
     }
 
     public function kick(Team $team, User $user){
@@ -135,6 +131,6 @@ class TeamUserController extends Controller
 
         $team->members()->detach($user->id);
 
-        return redirect()->back()->with('success', $team->team_name . "'s User Kicked Successfully: ". $user->name);
+        return redirect()->back()->with('success', "User Kicked Successfully");
     }
 }
