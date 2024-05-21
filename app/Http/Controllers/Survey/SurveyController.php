@@ -81,8 +81,8 @@ class SurveyController extends Controller
 
     public function update(CreateOrUpdateSurveyRequest $request, Survey $survey)
     {
+        // $this->authorize('userIsTeamMember', $survey->team);
         $this->authorize('surveyAndUserMatch', $survey);
-        $this->authorize('userIsTeamMember', $survey->team);
 
         $survey->team_id = $request->input('team_id');
         $survey->survey_title =  $request->input('survey_title');
@@ -118,6 +118,18 @@ class SurveyController extends Controller
         return redirect()->route('questions.index', ['survey' => $survey]);
     }
 
+    public function destroy(Survey $survey)
+    {
+        $this->authorize('surveyAndUserMatch', $survey);
+
+        $deleted = $survey->delete();
+        if (!$deleted) {
+            return abort(500);
+        }
+
+        Session::flash('survey_deleted', $survey);
+        return redirect()->route('surveys.index');
+    }
 
     public function restore(String $survey)
     {
@@ -130,19 +142,6 @@ class SurveyController extends Controller
         Session::flash('survey_restored', $survey);
 
         return redirect()->route('questions.index', ['survey' => $survey]);
-    }
-
-    public function destroy(Survey $survey)
-    {
-        $this->authorize('surveyAndUserMatch', $survey);
-
-        $deleted = $survey->delete();
-        if (!$deleted) {
-            return abort(500);
-        }
-
-        Session::flash('survey_deleted', $survey);
-        return redirect()->route('surveys.index');
     }
 
     public function golive(Survey $survey){
