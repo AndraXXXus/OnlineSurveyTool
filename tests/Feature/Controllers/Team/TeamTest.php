@@ -9,6 +9,7 @@ use App\Models\Team\Team;
 use App\Models\Survey\Survey;
 use Illuminate\Support\Facades\Hash;
 
+use function PHPUnit\Framework\assertFalse;
 use function PHPUnit\Framework\assertNotNull;
 use function PHPUnit\Framework\assertNull;
 use function PHPUnit\Framework\assertTrue;
@@ -25,6 +26,7 @@ class TeamTest extends TestCase
 
 
     protected $user;
+    protected $other_team_member_user;
     protected $team;
     protected $survey;
 
@@ -35,6 +37,8 @@ class TeamTest extends TestCase
         $this->user = User::factory()->create(['email' => 'example@test.com', 'name'=>'testUser']);
         $this->team = $this->user->teams->first();
         $this->survey = Survey::factory()->create(['user_id' => $this->user->id, 'team_id' => $this->team->id]);
+        $this->other_team_member_user = User::factory()->create(['email' => 'new_example@test.com', 'name'=>'new_testUser']);
+        $this->team->members()->attach($this->other_team_member_user->id, ['status' => 'accepted']);
     }
 
     public function test_new_team_store(){
@@ -54,6 +58,12 @@ class TeamTest extends TestCase
 
     public function test_team_name_update(){
         assertTrue($this->team->user_id === $this->user->id);
+
+        $response = $this->actingAs($this->other_team_member_user)->put('/team/update/'.$this->team->id, [
+            'team_name' => "my_new_teams_new_name" ]);
+
+        $response->assertStatus(403);
+
         $response = $this->actingAs($this->user)->put('/team/update/'.$this->team->id, [
             'team_name' => "my_new_teams_new_name" ]);
 
@@ -73,12 +83,12 @@ class TeamTest extends TestCase
     }
 
     public function test_team_giveawayteamleadership(){
-        $new_user = User::factory()->create(['email' => 'new_example@test.com', 'name'=>'new_testUser']);
-
-        $this->team->members()->attach($new_user->id);
+        $independent_other_user = User::factory()->create(['email' => 'independent_example@test.com',
+        'name'=>'independent_testUser']);
 
         assertTrue($this->team->members->pluck('id')->contains($this->user->id));
-        assertTrue($this->team->members->pluck('id')->contains($new_user->id));
+        assertTrue($this->team->members->pluck('id')->contains($this->other_team_member_user->id));
+        assertFalse($this->team->members->pluck('id')->contains($independent_other_user->id));
 
         $this->assertDatabaseHas('teams', [
             'id' => $this->team->id,
@@ -91,27 +101,39 @@ class TeamTest extends TestCase
         ]);
         $this->assertDatabaseHas('team_user', [
             'team_id' => $this->team->id,
-            'user_id' => $new_user->id,
+            'user_id' => $this->other_team_member_user->id,
         ]);
+        $this->assertDatabaseMissing('team_user', [
+            'team_id' => $this->team->id,
+            'user_id' => $independent_other_user->id,
+        ]);
+
 
         assertTrue($this->team->user_id === $this->user->id);
         $this->assertDatabaseHas('teams', [
             'user_id' => $this->user->id,
         ]);
-        $response = $this->actingAs($new_user)->put('/team/giveawayteamleadership/'.$this->team->id, [
-            'new_teamleader_user_id' => $new_user->id ]);
+
+        $response = $this->actingAs($independent_other_user)->put('/team/giveawayteamleadership/'.$this->team->id, [
+            'new_teamleader_user_id' => $independent_other_user->id ]);
+
+        $response->assertStatus(403);
+
+        $response = $this->actingAs($this->other_team_member_user)->put('/team/giveawayteamleadership/'.$this->team->id, [
+            'new_teamleader_user_id' => $this->other_team_member_user->id ]);
 
         $response->assertStatus(403);
 
         $response = $this->actingAs($this->user)->put('/team/giveawayteamleadership/'.$this->team->id, [
-            'new_teamleader_user_id' =>c ]);
-        $this->team->team_id = $this->team;
+            'new_teamleader_user_id' => $this->other_team_member_user->id ]);
         $response->assertStatus(302);
 
+        $this->team->refresh();
 
+        assertTrue($this->team->user_id===$this->other_team_member_user->id);
         $this->assertDatabaseHas('teams', [
             'id' => $this->team->id,
-            'user_id' => $new_user->id,
+            'user_id' => $this->other_team_member_user->id,
         ]);
     }
 
@@ -119,15 +141,13 @@ class TeamTest extends TestCase
 
     public function test_team_archive_and_restore()
     {
-        $new_user = User::factory()->create(['email' => 'new_example@test.com', 'name'=>'new_testUser']);
-        $this->team->members()->attach($new_user->id);
         $this->assertDatabaseHas('team_user', [
             'team_id' => $this->team->id,
             'user_id' => $this->user->id,
         ]);
         $this->assertDatabaseHas('team_user', [
             'team_id' => $this->team->id,
-            'user_id' => $new_user->id,
+            'user_id' => $this->other_team_member_user->id,
         ]);
 
         assertTrue($this->team->user_id === $this->user->id);
@@ -144,7 +164,7 @@ class TeamTest extends TestCase
         assertTrue(Team::findOrFail($team_id)->deleted_at === null);
         assertTrue(Survey::findOrFail($survey_id)->deleted_at === null);
 
-        $response = $this->actingAs($new_user)->delete('/team/destroy/'.$this->team->id);
+        $response = $this->actingAs($this->other_team_member_user)->delete('/team/destroy/'.$this->team->id);
         $response->assertStatus(403);
 
         $response = $this->actingAs($this->user)->delete('/team/destroy/'.$this->team->id);
@@ -160,7 +180,15 @@ class TeamTest extends TestCase
             'id' => $survey_id,
         ]);
 
-        Team::onlyTrashed()->findOrFail($team_id)->restore();
+        $response = $this->actingAs($this->other_team_member_user)->put('/team/restore/'.$this->team->id);
+        $response->assertStatus(403);
+
+        assertTrue(Team::onlyTrashed()->findOrFail($team_id)->deleted_at != null);
+        assertTrue(Survey::onlyTrashed()->findOrFail($survey_id)->deleted_at != null);
+
+        $response = $this->actingAs($this->user)->put('/team/restore/'.$this->team->id);
+        $response->assertStatus(302);
+
         assertTrue(Team::findOrFail($team_id)->deleted_at === null);
         assertTrue(Survey::findOrFail($survey_id)->deleted_at === null);
 
@@ -174,15 +202,13 @@ class TeamTest extends TestCase
 
     public function test_team_forcedelete()
     {
-        $new_user = User::factory()->create(['email' => 'new_example@test.com', 'name'=>'new_testUser']);
-        $this->team->members()->attach($new_user->id);
         $this->assertDatabaseHas('team_user', [
             'team_id' => $this->team->id,
             'user_id' => $this->user->id,
         ]);
         $this->assertDatabaseHas('team_user', [
             'team_id' => $this->team->id,
-            'user_id' => $new_user->id,
+            'user_id' => $this->other_team_member_user->id,
         ]);
 
         assertTrue($this->team->user_id === $this->user->id);
@@ -201,7 +227,7 @@ class TeamTest extends TestCase
 
         Team::findOrFail($this->team->id)->delete();
 
-        $response = $this->actingAs($new_user)->delete('/team/forcedelete/'.$this->team->id);
+        $response = $this->actingAs($this->other_team_member_user)->delete('/team/forcedelete/'.$this->team->id);
         $response->assertStatus(403);
 
         $response = $this->actingAs($this->user)->delete('/team/forcedelete/'.$this->team->id);

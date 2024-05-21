@@ -22,85 +22,108 @@ class TeamUserTest extends TestCase
 
 
     protected $user;
+    protected $other_team_member_user;
+    protected $new_user_2_invite;
     protected $team;
     protected $survey;
-    protected $survey_trashed;
 
-    // protected function setUp(): void
-    // {
-    //     parent::setUp();
+    protected function setUp(): void
+    {
+        parent::setUp();
 
-    //     $this->user = User::factory()->create(['email' => 'example@test.com', 'name'=>'testUser']);
-    //     $this->team = $this->user->teams->first();
-    //     $this->survey = Survey::factory()->create(['user_id' => $this->user->id, 'team_id' => $this->team->id]);
-    // }
+        $this->user = User::factory()->create(['email' => 'example@test.com', 'name'=>'testUser']);
+        $this->team = $this->user->teams->first();
+        $this->survey = Survey::factory()->create(['user_id' => $this->user->id, 'team_id' => $this->team->id]);
+        $this->other_team_member_user = User::factory()->create(['email' => 'new_example@test.com', 'name'=>'new_testUser']);
+        $this->team->members()->attach($this->other_team_member_user->id, ['status' => 'accepted']);
 
-    // public function test_team_is_archive()
+        $this->new_user_2_invite = User::factory()->create(['email' => 'invite@test.com', 'name'=>'invite_testUser']);
+    }
+
+    public function test_team_invitation()
+    {
+        $team_id = $this->team->id;
+
+        $response = $this->actingAs($this->user)->post('/teamuser/invitation/'.$team_id, [
+            'email_'.$team_id => "not_a@valid.emial" ]);
+        $response->assertStatus(302);
+        $response->assertSessionHas('errors');
+
+        $response = $this->actingAs($this->user)->post('/teamuser/invitation/'.$team_id, [
+            'email_'.$team_id => "" ]);
+        $response->assertStatus(302);
+        $response->assertSessionHas('errors');
+
+        $response = $this->actingAs($this->user)->post('/teamuser/invitation/'.$team_id, [
+            'email_'.$team_id => 12 ]);
+        $response->assertStatus(302);
+        $response->assertSessionHas('errors');
+
+        $response = $this->actingAs($this->other_team_member_user)->post('/teamuser/invitation/'.$team_id, [
+            'email_'.$team_id => $this->new_user_2_invite->email ]);
+        $response->assertStatus(403);
+
+        $response = $this->actingAs($this->user)->post('/teamuser/invitation/'.$team_id, [
+            'email_'.$team_id => $this->new_user_2_invite->email ]);
+        $response->assertStatus(302);
+        $response->assertSessionHas('success', 'Invitation Successfully Sent');
+
+        $response = $this->actingAs($this->user)->post('/teamuser/invitation/'.$team_id, [
+            'email_'.$team_id => $this->new_user_2_invite->email ]);
+        $response->assertStatus(302);
+        $response->assertSessionHas('warning', "User has already been invited");
+
+        $response = $this->actingAs($this->user)->post('/teamuser/invitation/'.$team_id, [
+            'email_'.$team_id => $this->other_team_member_user->email ]);
+        $response->assertStatus(302);
+        $response->assertSessionHas('warning', "User is already a member");
+
+        assertTrue($this->team->invitations->pluck('id')->contains($this->new_user_2_invite->id));
+    }
+
+    public function test_team_cancel_invitation(){
+        $team_id = $this->team->id;
+        $response = $this->actingAs($this->user)->put('/teamuser/' . $team_id . "/cancel_invitation/" . $this->new_user_2_invite->id);
+        $response->assertStatus(302);
+        $response->assertSessionHas('warning', "User has not yet been invited");
+
+        $this->team->invitations()->attach($this->new_user_2_invite->id);
+
+        $response = $this->actingAs($this->other_team_member_user)->put('/teamuser/' . $team_id . "/cancel_invitation/" . $this->new_user_2_invite->id);
+        $response->assertStatus(403);
+
+
+        $response = $this->actingAs($this->user)->put('/teamuser/' . $team_id . "/cancel_invitation/" . $this->new_user_2_invite->id);
+        $response->assertStatus(302);
+        $response->assertSessionHas('success', "Invitation Successfully withdrawn");
+
+        $response = $this->actingAs($this->user)->put('/teamuser/' . $team_id . "/cancel_invitation/" . $this->other_team_member_user->id);
+        $response->assertStatus(302);
+        $response->assertSessionHas('warning', "Invitation already accepted!");
+    }
+
+    // public function test_team_accept_invitation()
     // {
     //     $team_id = $this->team->id;
-    //     $survey_id = $this->survey->id;
-
-    //     assertTrue(Team::findOrFail($team_id)->deleted_at === null);
-    //     assertTrue(Survey::findOrFail($survey_id)->deleted_at === null);
-
-    //     $response = $this->actingAs($this->user)->delete('/team/destroy', [
-    //         'team' => $this->team ]);
+    //     $this->team->invitations()->attach($this->new_user_2_invite->id);
+    //     $response = $this->actingAs($this->new_user_2_invite)->put('/teamuser/accept/' . $team_id);
     //     $response->assertStatus(302);
-    //     dump($response);
-    //     assertTrue(Team::findOrFail($team_id)->deleted_at != null);
-    //     assertTrue(Survey::findOrFail($survey_id)->deleted_at != null);
-
-    //     $this->team->restore();
-    //     assertTrue(Team::findOrFail($team_id)->deleted_at === null);
-    //     assertTrue(Survey::findOrFail($survey_id)->deleted_at === null);
+    //     $response->assertSessionHas('warning', "Invitation already accepted!");
     // }
 
-    // public function test_team_if_archived_forcedelete()
+    // public function test_team_decline_invitation()
     // {
 
     // }
 
-
-    // public function test_profile_changepassword()
+    // public function test_team_leaveTeam()
     // {
-    //     assertTrue(Hash::check('password', $this->user->password));
-
-    //     $hashed_password = Hash::make('alma');
-    //     $response = $this->actingAs($this->user)->put('/profile/changepassword', [
-    //         'password' => $hashed_password ]);
-
-    //     $response->assertStatus(302,'User Name Updated Successfully');
-
-    //     $user = User::findOrFail($this->user->id);
-
-    //     assertTrue(Hash::check('password', $user->password));
-    // }
-
-    // public function test_profile_destroy_has_team()
-    // {
-    //     $response = $this->actingAs($this->user)->delete('/profile/destroy');
-    //     $response->assertStatus(302, 'Deleting user only possible if you are no longer own any (archived) team(s)!');
-    //     assertTrue($this->user->teams_owned_withArchived()->count()>0);
-
-    //     $this->assertDatabaseHas('users', [
-    //         'id' => $this->user->id,
-    //     ]);
 
     // }
 
-    // public function test_profile_destroy_has_no_team()
+    // public function test_team_kick_user()
     // {
-    //     $user_id = $this->user->id;
 
-    //     $team = $this->user->teams->first();
-    //     $team->delete();
-    //     $team->forceDelete();
-
-    //     $response = $this->actingAs($this->user)->delete('/profile/destroy');
-    //     $response->assertStatus(302);
-
-    //     assertTrue(User::find($user_id) === null);
     // }
-
 
 }

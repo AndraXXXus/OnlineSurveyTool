@@ -35,7 +35,7 @@ class TeamUserController extends Controller
             return redirect()->back()->with('warning', "User has already been invited");
         }
 
-        $team->members()->attach($user->id);
+        $team->invitations()->attach($user->id);
 
         return redirect()->back()->with('success', 'Invitation Successfully Sent');
     }
@@ -67,9 +67,9 @@ class TeamUserController extends Controller
             $team->invitations()->detach($user_id);
             $team->members()->attach($user_id, ['status' => 'accepted']);
 
-            return redirect()->back()->with('success', 'Team invitation successfully accepted: ' . $team->team_name);
+            return redirect()->back()->with('success', 'Team invitation successfully accepted');
         }else{
-            return redirect()->back()->with('warning', 'Team archived/deleted or invitation has been withdrawn: ' . $team->team_name);
+            return redirect()->back()->with('warning', 'Team archived/deleted or invitation has been withdrawn or never have been sent');
         }
 
     }

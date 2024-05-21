@@ -12,6 +12,7 @@
 .env.example
 .env.backup
 example4rendercom.env
+.phpunit.cache
 .phpunit.result.cache
 docker-compose.override.yml
 Homestead.jsons
