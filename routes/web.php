@@ -87,7 +87,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::put('choices/restore/{choice}', [ChoiceController::class, 'restore'])->name('choices.restore');
     Route::put('questionnaire/restore/{survey}', [QuestionnaireController::class, 'restore'])->name('questionnaires.restore');
     //getreplica
-    Route::post('questionnaires/getreplica/{survey}', [QuestionnaireController::class, 'getreplica'])->name('questionnaires.getreplica');
+    Route::post('questionnaire/getreplica/{survey}', [QuestionnaireController::class, 'getreplica'])->name('questionnaire.getreplica');
 
     //download
     Route::get('/stats/download_csv/{survey}', [StatsController::class, 'download_csv'])->name('stats.download_csv');

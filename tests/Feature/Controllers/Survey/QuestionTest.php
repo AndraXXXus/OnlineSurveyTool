@@ -45,5 +45,67 @@ class QuestionTest extends TestCase
         $this->new_user_2_invite = User::factory()->create(['email' => 'invite@test.com', 'name'=>'invite_testUser']);
     }
 
+    public function test_question_index(){
+        $response = $this->actingAs($this->other_team_member_user)->get('surveys/survey/' . $this->survey->id . '/questions/',);
+        $response->assertStatus(403);
+
+        $response = $this->actingAs($this->user)->get('surveys/survey/' . $this->survey->id . '/questions/',);
+        $response->assertStatus(200);
+
+        $this->survey->delete();
+        $this->survey->refresh();
+        $response = $this->actingAs($this->user)->get('surveys/survey/' . $this->survey->id . '/questions/',);
+        $response->assertStatus(404);
+    }
+
+    public function test_question_store_update(){
+        $response = $this->actingAs($this->other_team_member_user)->post('questions/store/' . $this->survey->id ,
+            [
+            'question_text' => 'text',
+            'question_required' => "",
+            'question_type' => "radio-button",
+            ]);
+        $response->assertStatus(403);
+
+        $response = $this->actingAs($this->user)->post('questions/store/' . $this->survey->id ,
+            [
+            'question_text' => 'text',
+            'question_required' => "",
+            'question_type' => "radio-button",
+            'youtube_id' => '000',
+            'imageOrVideoSwitch' => 'on',
+            ]);
+        $response->assertStatus(302);
+        $response->assertSessionHas('errors');
+
+        $response = $this->actingAs($this->user)->post('questions/store/' . $this->survey->id ,
+            [
+            'question_text' => 'text',
+            'question_required' => "",
+            'question_type' => "radio",
+            ]);
+        $response->assertStatus(302);
+        $response->assertSessionHas('errors');
+
+        $response = $this->actingAs($this->user)->post('questions/store/' . $this->survey->id ,
+            [
+            'question_text' => 'text',
+            'question_required' => "",
+            'question_type' => "radio-button",
+            ]);
+        $response->assertStatus(302);
+
+        $this->survey->delete();
+        $this->survey->refresh();
+        $response = $this->actingAs($this->user)->post('questions/store/' . $this->survey->id ,
+            [
+            'question_text' => 'text',
+            'question_required' => "",
+            'question_type' => "radio-button",
+            'youtube_id' => 'XCXQRIbZOtg',
+            'imageOrVideoSwitch' => 'on',
+            ]);
+        $response->assertStatus(404);
+    }
     
 }

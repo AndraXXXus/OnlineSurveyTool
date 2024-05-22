@@ -32,6 +32,9 @@ class ChoiceController extends Controller
 
     public function archive(Question $question)
     {
+        if($question===null){
+            return abort(404);
+        }
         $survey = $question->survey;
         $this->authorize('surveyAndUserMatch', $survey);
         $choices = $question->choices()->onlyTrashed()->orderBy('deleted_at', 'DESC')->get();
@@ -50,6 +53,9 @@ class ChoiceController extends Controller
 
     public function store(CreateOrUpdateChoiceRequest $request, Question $question)
     {
+        if($question===null){
+            return abort(404);
+        }
         $survey = $question->survey;
 
         $this->authorize('surveyAndUserMatch', $survey);
@@ -71,6 +77,9 @@ class ChoiceController extends Controller
     public function edit(Choice $choice)
     {
         $question = $choice->question;
+        if($question===null){
+            return abort(404);
+        }
         $survey = $question->survey;
 
         $this->authorize('surveyAndUserMatch', $survey);
@@ -82,6 +91,9 @@ class ChoiceController extends Controller
     public function update(CreateOrUpdateChoiceRequest $request, Choice $choice)
     {
         $question = $choice->question;
+        if($question===null){
+            return abort(404);
+        }
         $survey = $question->survey;
 
         $this->authorize('surveyAndUserMatch', $survey);
@@ -109,6 +121,9 @@ class ChoiceController extends Controller
     public function destroy(Choice $choice)
     {
         $question = $choice->question;
+        if($question===null){
+            return abort(404);
+        }
         $survey = $question->survey;
 
         $this->authorize('surveyAndUserMatch', $survey);
@@ -145,6 +160,9 @@ class ChoiceController extends Controller
     public function restore(String $choice){
         $choice = Choice::onlyTrashed()->findOrFail($choice);
         $question = $choice->question;
+        if($question===null){
+            return abort(404);
+        }
         $survey = $question->survey;
 
         $this->authorize('surveyAndUserMatch', $survey);
@@ -172,6 +190,9 @@ class ChoiceController extends Controller
         }
 
         $question = $choice->question;
+        if($question===null){
+            return abort(404);
+        }
         $survey = $question->survey;
         $user = $survey->user;
 
@@ -212,6 +233,9 @@ class ChoiceController extends Controller
         $choice = Choice::onlyTrashed()->findOrFail($choice);
         $this->authorize('surveyAndUserMatch', $choice->question->survey);
         $question = $choice->question;
+        if($question===null){
+            return abort(404);
+        }
         $survey = $question->survey;
 
         $deleted = $choice->forceDelete();
