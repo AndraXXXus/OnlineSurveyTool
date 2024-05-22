@@ -29,11 +29,11 @@ class SurveyPolicy
     }
 
     public function surveyAndUserMatch(User $user, Survey $survey){
-        return ($this->isLeagalUnpublishedSurvey($user, $survey) && $survey->user_id === $user->id && $this->userIsMemberInSurveysTeam($user, $survey));
+        return ($this->isLeagalUnpublishedSurvey($user, $survey) && ($survey->user_id === $user->id) && $this->userIsMemberInSurveysTeam($user, $survey));
     }
 
     public function surveyAndUserMatchOrIsAdmin(User $user, Survey $survey){
-        return (($survey->user_id === $user->id ||$survey->team->user_id === $user->id ) && $this->userIsMemberInSurveysTeam($user, $survey));
+        return ( ( ($survey->user_id === $user->id) || ($survey->team->user_id === $user->id) ) && $this->userIsMemberInSurveysTeam($user, $survey));
     }
 
 
