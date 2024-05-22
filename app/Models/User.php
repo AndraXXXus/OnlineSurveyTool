@@ -71,7 +71,7 @@ class User extends Authenticatable
         return $this->teams()->withTrashed()->where('teams.user_id', $this->id);
     }
 
-    public function questionarries(){
+    public function questionnaires(){
         return $this->hasMany(Survey::class)->whereNotNull('questionnaire_id');
     }
 

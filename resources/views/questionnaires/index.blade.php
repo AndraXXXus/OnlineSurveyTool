@@ -50,7 +50,7 @@
     @forelse ($teams as $team)
 
     @php
-        $surveys =  isset($archive) ? $team->questionarries()->onlyTrashed()->get() : $team->questionarries;
+        $surveys =  isset($archive) ? $team->questionnaires()->onlyTrashed()->get() : $team->questionnaires;
     @endphp
         {{-- @if($team->surveys->count()>0) --}}
             <div class="d-flex justify-content-center row mt-3">

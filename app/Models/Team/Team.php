@@ -33,7 +33,7 @@ class Team extends Model
         return $this->hasMany(Survey::class)->whereNull('questionnaire_id');
     }
 
-    public function questionarries(){
+    public function questionnaires(){
         return $this->hasMany(Survey::class)->whereNotNull('questionnaire_id');
     }
 

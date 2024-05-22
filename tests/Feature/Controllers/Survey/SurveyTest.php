@@ -14,6 +14,7 @@ use function PHPUnit\Framework\assertFalse;
 use function PHPUnit\Framework\assertNotNull;
 use function PHPUnit\Framework\assertNull;
 use function PHPUnit\Framework\assertTrue;
+use Ramsey\Uuid\Uuid;
 
 class SurveyTest extends TestCase
 {
@@ -127,9 +128,39 @@ class SurveyTest extends TestCase
         $response->assertStatus(302);
         $response->assertSessionHas('survey_updated');
 
+        $this->assertDatabaseMissing('surveys', [
+            'survey_title' => "unique survey title",
+            'team_id' =>$this->team->id,
+        ]);
+
         $this->assertDatabaseHas('surveys', [
+            'team_id' =>$new_team->id,
             'survey_title' => "unique survey title",
         ]);
+
+
+        $this->survey->questionnaire_id = '1';
+        $this->survey->save();
+        $this->survey->refresh();
+        
+        $response = $this->actingAs($this->user)->put('/surveys/update/' . $this->survey->id, [
+            'team_id' => $this->team->id,
+            'survey_title' => "unique survey title",
+            'survey_description' => "",
+            'team_message' => "",
+        ]);
+        $response->assertStatus(403);
+
+        $this->survey->delete();
+        $this->survey->save();
+        $this->survey->refresh();
+        $response = $this->actingAs($this->user)->put('/surveys/update/' . $this->survey->id, [
+            'team_id' => $this->team->id,
+            'survey_title' => "unique survey title",
+            'survey_description' => "",
+            'team_message' => "",
+        ]);
+        $response->assertStatus(404);
     }
 
     public function test_survey_destroy_and_restore_and_forcedelete(){
@@ -148,6 +179,17 @@ class SurveyTest extends TestCase
         $response = $this->actingAs($this->user)->delete('/surveys/');
         $response->assertStatus(405);
 
+
+        $this->survey->questionnaire_id = '1';
+        $this->survey->save();
+        $this->survey->refresh();
+        $response = $this->actingAs($this->user)->delete('/surveys/'. $this->survey->id);
+        $response->assertStatus(403);
+
+        $this->survey->questionnaire_id = null;
+        $this->survey->save();
+        $this->survey->refresh();
+
         $response = $this->actingAs($this->user)->delete('/surveys/'. $this->survey->id);
         $response->assertStatus(302);
         $response->assertSessionHas('survey_deleted');
@@ -160,6 +202,7 @@ class SurveyTest extends TestCase
 
         $response = $this->actingAs($this->user)->delete('/surveys/'. $this->survey->id);
         $response->assertStatus(404);
+
 
         // ----------------------------------------------------------------
 
@@ -235,8 +278,24 @@ class SurveyTest extends TestCase
 
 
     public function test_survey_golive(){
+        $this->assertDatabaseHas('surveys', [
+            'id' => $this->survey->id,
+            'questionnaire_id' => null,
+        ]);
+
+        $response = $this->actingAs($this->user)->put('/surveys/golive/'. $this->survey->id);
+        $response->assertStatus(302);
+
+        $this->survey->refresh();
+        $questionnaire = Survey::where('survey_title',$this->survey->survey_title)->whereNotNull('questionnaire_id');$this->survey->survey_;
+        assertNotNull($questionnaire);        
     }
 
     public function test_survey_clone(){
+        $response = $this->actingAs($this->user)->post('/surveys/clone/'. $this->survey->id);
+        $response->assertStatus(302);
+        $response->assertSessionHas('survey_cloned');
+        $survey = Survey::where('survey_title',$this->survey->survey_title)->where('id','!=',$this->survey->id);
+        assertNotNull($survey);   
     }
 }

@@ -6,14 +6,14 @@
 -   [✓] Hierarchical
 -   [✓] profile: controller blade, pending, user details/password change, delete user
 -   [✓] Team: controller blade, kick, create new team, invite new team member, edit team name, team delete, give ownership of another member
--   [✓] questionarrie gombok, forcedlete modal
+-   [✓] questionnaire gombok, forcedlete modal
 -   [✓] email new password!!!!!!!!!!, no email!
 -   [✓] no-js comptibilty = no darkmode
 -   [✓] session lenght dia
 -   [✓] Stats
 -   [✓] youtube video valid validator server & client side
 -   [✓] video req, full watch, endable when video ended and chioce picked
--   [✓] questionarrie store!!!!!!
+-   [✓] questionnaire store!!!!!!
 -   [✓] stats szebb és nem tölt be a fő oszlopia
 -   [✓] disabled submit 4 questio requered!!!
 -   [✓] opens new window to fill out survey
@@ -22,7 +22,7 @@
 -   [✓] question,oprtuin create/edit back to list button
 -   [✓] tipusos quesation/choice megjelenítés
 -   [✓] kitöltés front end reform
--   [✓] questionarrie realod if already picked choice(s)
+-   [✓] questionnaire realod if already picked choice(s)
 -   [✓] question_id in seesion instead of sending it "in url"
 -   [✓] all buttons -> components generalize
 -   [✓] export filled questionnaires
@@ -59,4 +59,4 @@
 -   [-] report generálás
 -   [-] LiveWire
 -   [-] selected id modified + send + validation error -> NOT disabled submit!!
--   [-] surevey x questionarrie kettéválasztás DB-n
+-   [-] surevey x questionnaire kettéválasztás DB-n
