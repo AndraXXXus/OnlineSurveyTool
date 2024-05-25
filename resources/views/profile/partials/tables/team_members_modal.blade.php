@@ -16,8 +16,6 @@
                 <table class="table">
                     <thead>
                     <tr>
-                        <th scope="col">Team name</th>
-                        <th scope="col">Team Leader Name</th>
                         <th scope="col">Memeber name</th>
                         <th scope="col">Memeber email</th>
                     </tr>
@@ -26,11 +24,7 @@
                     @foreach ($team->members as $user)
 
                     <tr>
-                        <th scope="row">{{$team->team_name}}</th>
-                        <td>{{$team->teamleader()->name}}</td>
-                        <td>
-                            {{$user->name}}
-                        </td>
+                        <th scope="row">{{$user->name}} @if($user->id === $team->user_id) * @endif @if($user->id === Auth::id()) (You) @endif </th>
                         <td>
                             {{$user->email}}
                         </td>
