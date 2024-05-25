@@ -10,7 +10,7 @@ $data_bs_target= 'forcedelete_user_modal_'.Auth::id();
 
 <div class="mt-3 mb-3 text-center">
 @if(Auth::User()->teams_owned_withArchived()->count() > 0)
-    <button class = "btn btn btn-warning">
+    <button class = "btn btn btn-secondary">
     <a
     title="To Team Management"
     href="{{ route('team.index') }}"

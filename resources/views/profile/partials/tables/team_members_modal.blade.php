@@ -1,4 +1,4 @@
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target={{"#teamMember_".$team->id}} >
+<button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target={{"#teamMember_".$team->id}} >
     Team Members
 </button>
 
