@@ -1,6 +1,7 @@
 ## Alap Laraveles gitignore
 ### ------------------------------------------------------------------
 /node_modules
+/reports
 /public/hot
 /public/storage
 /public/fontawesome
