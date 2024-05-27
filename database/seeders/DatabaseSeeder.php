@@ -104,7 +104,7 @@ class DatabaseSeeder extends Seeder
                     }
 
                     if($i === 0 && $current_survey->questionnaire_id != null){
-                        for ($kkk = 1; $kkk <= 1000; $kkk++) {
+                        for ($kkk = 1; $kkk <= 20; $kkk++) {
                             $responder_id = Uuid::uuid4();
                             $date = date("Y-m-d H:i:s");
                             $date = date('Y-m-d H:i:s', strtotime("-". rand(1,5) ." day", strtotime($date)));
@@ -155,8 +155,8 @@ class DatabaseSeeder extends Seeder
 
                                     $answer_texts = ['alma','banan','korte','szolo','nararncs','eper','malna'];
                                     $rand_keys_answer_texts = array_rand($answer_texts, 2);
-                                    $rand_rand_keys_answer_texts1 = $choices[$rand_keys_answer_texts[0]];
-                                    $rand_rand_keys_answer_texts2 = $choices[$rand_keys_answer_texts[1]];
+                                    $rand_rand_keys_answer_texts1 = $answer_texts[$rand_keys_answer_texts[0]];
+                                    $rand_rand_keys_answer_texts2 = $answer_texts[$rand_keys_answer_texts[1]];
                                     Answer::factory()->create([
                                         'survey_id' => $current_survey->id,
                                         'question_id' => $current_question->id,
