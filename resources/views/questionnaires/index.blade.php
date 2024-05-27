@@ -22,8 +22,15 @@
             </div>
             @endif
             @if(Auth::User()->invitations->count() > 0)
-            <div class="alert alert-warning">
-                You have pending invitations!
+            <div class="alert alert-warning text-center">
+                <button class = "btn btn btn-warning">
+                    <a
+                    title="To User Profile"
+                    href="{{ route('profile.index') }}"
+                    >
+                    You have pending invitations!
+                    </a>
+                </button>
             </div>
             @endif
         </div>
