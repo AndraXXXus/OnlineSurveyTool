@@ -62,7 +62,7 @@
         }
         else{
             document.getElementById('ommit_select').setAttribute('disabled',true);
-            document.getElementById('ommit_select').text =  'Pick an choice';
+            document.getElementById('ommit_select').text =  'Pick a choice';
         };
     }
 </script>
