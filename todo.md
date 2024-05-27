@@ -1,7 +1,5 @@
+-   [✓] factroy 4 answers!!
 -   [✓] backend tests!!!! -> controller endpointok
--   [ ] Readme.md!!
--   [ ] factroy 4 answers!!
-
 -   [✓] Team softdelete
 -   [✓] Hierarchical
 -   [✓] profile: controller blade, pending, user details/password change, delete user
@@ -41,6 +39,7 @@
 -   [✓] questionarri kettéválasztás 2 controllerre -> 3 lett, maradhat
 -   [✓] 419
 
+-   [ ] Readme.md!!
 -   [ ] answers szétszedés
 -   [ ] prevent login when already logged in (from other device)
 -   [ ] add edit, delete to question,choice show

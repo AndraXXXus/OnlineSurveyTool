@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Survey\Survey;
 use App\Models\Survey\Question;
 use App\Models\Survey\Choice;
+use App\Models\Survey\Answer;
 use App\Models\Team\Team;
 use Illuminate\Support\Facades\DB;
 use Ramsey\Uuid\Uuid;
@@ -91,14 +92,94 @@ class DatabaseSeeder extends Seeder
 
 
                     $num_o = rand(3, 4);
+                    $choices = [];
                     for ($l = 1; $l <= $num_o; $l++) {
 
-                        Choice::factory()->create([
+                        $choice = Choice::factory()->create([
                             'question_id' => $current_question->id,
                             'choice_position'=> $l,
                             'choice_text'=> $l . '. choice of the ' . $k . '. question ' . 'of the ' . $j .'. survey ' . 'for the ' . $i.'. user',
                         ]);
+                        $choices[] = $choice;
                     }
+
+                    if($i === 0 && $current_survey->questionnaire_id != null){
+                        for ($kkk = 1; $kkk <= 1000; $kkk++) {
+                            $responder_id = Uuid::uuid4();
+                            $date = date("Y-m-d H:i:s");
+                            $date = date('Y-m-d H:i:s', strtotime("-". rand(1,5) ." day", strtotime($date)));
+                            $question_started_at = date("Y-m-d H:i:s",strtotime($date." -" . rand(1, 5) . " minutes"));
+
+                            if($current_question->question_required === true || rand(0, 1)==1){
+                                if($current_question->question_type === "radio-button" || $current_question->question_type === "dropp-down"){
+                                    $rand_key = array_rand($choices, 1);
+                                    $rand_choice = $choices[$rand_key];
+                                    Answer::factory()->create([
+                                        'survey_id' => $current_survey->id,
+                                        'question_id' => $current_question->id,
+                                        'choice_id' => $rand_choice->id,
+                                        'responder_id'=> $responder_id,
+                                        'answer_text'=> $rand_choice->choice_text,
+                                        'question_started_at' => $question_started_at,
+                                        'created_at' => $date,
+                                    ]);
+                                }
+                                elseif($current_question->question_type === "mutiple-choice"){
+                                    $rand_keys = array_rand($choices, 2);
+                                    $rand_choice1 = $choices[$rand_keys[0]];
+                                    $rand_choice2 = $choices[$rand_keys[1]];
+                                    Answer::factory()->create([
+                                        'survey_id' => $current_survey->id,
+                                        'question_id' => $current_question->id,
+                                        'choice_id' => $rand_choice1->id,
+                                        'responder_id'=> $responder_id,
+                                        'answer_text'=> $rand_choice1->choice_text,
+                                        'question_started_at' => $question_started_at,
+                                        'created_at' => $date,
+                                    ]);
+                                    Answer::factory()->create([
+                                        'survey_id' => $current_survey->id,
+                                        'question_id' => $current_question->id,
+                                        'choice_id' => $rand_choice2->id,
+                                        'responder_id'=> $responder_id,
+                                        'answer_text'=> $rand_choice2->choice_text,
+                                        'question_started_at' => $question_started_at,
+                                        'created_at' => $date,
+                                    ]);
+                                }
+
+                                elseif($current_question->question_type === "open"){
+                                    $rand_keys = array_rand($choices, 2);
+                                    $rand_choice1 = $choices[$rand_keys[0]];
+                                    $rand_choice2 = $choices[$rand_keys[1]];
+
+                                    $answer_texts = ['alma','banan','korte','szolo','nararncs','eper','malna'];
+                                    $rand_keys_answer_texts = array_rand($answer_texts, 2);
+                                    $rand_rand_keys_answer_texts1 = $choices[$rand_keys_answer_texts[0]];
+                                    $rand_rand_keys_answer_texts2 = $choices[$rand_keys_answer_texts[1]];
+                                    Answer::factory()->create([
+                                        'survey_id' => $current_survey->id,
+                                        'question_id' => $current_question->id,
+                                        'choice_id' => $rand_choice1->id,
+                                        'responder_id'=> $responder_id,
+                                        'answer_text'=> $rand_rand_keys_answer_texts1,
+                                        'question_started_at' => $question_started_at,
+                                        'created_at' => $date,
+                                    ]);
+                                    Answer::factory()->create([
+                                        'survey_id' => $current_survey->id,
+                                        'question_id' => $current_question->id,
+                                        'choice_id' => $rand_choice2->id,
+                                        'responder_id'=> $responder_id,
+                                        'answer_text'=> $rand_rand_keys_answer_texts2,
+                                        'question_started_at' => $question_started_at,
+                                        'created_at' => $date,
+                                    ]);
+                                }
+                            }
+                        }
+                    }
+
 
                 }
             }
