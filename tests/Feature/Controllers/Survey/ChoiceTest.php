@@ -12,6 +12,7 @@ use App\Models\Survey\Choice;
 use Illuminate\Support\Facades\Hash;
 
 use function PHPUnit\Framework\assertFalse;
+use function PHPUnit\Framework\assertNan;
 use function PHPUnit\Framework\assertNotNull;
 use function PHPUnit\Framework\assertNull;
 use function PHPUnit\Framework\assertTrue;
@@ -91,11 +92,61 @@ class ChoiceTest extends TestCase
 
     }
 
-    // public function test_question_moveing(){
+    public function test_question_archive_restore_moveing(){
+        $new_choice = Choice::factory()->create(['question_id' => $this->question->id, 'choice_text'=>'1st Choice', 'choice_position' => 2]);
 
+        assertTrue($this->choice->choice_position == 1);
+        assertTrue($new_choice->choice_position == 2);
 
+        $response = $this->actingAs($this->user)->delete('/choices/' . $this->choice->id );
+        $response->assertStatus(302);
+        $response->assertSessionHas('choice_deleted');
+        $this->choice->refresh();
 
+        assertNotNull($this->choice->deleted_at);
+        assertNull($this->choice->choice_position);
+        $new_choice->refresh();
 
-    // }
+        assertFalse($new_choice->choice_position == 2);
+        assertTrue($new_choice->choice_position == 1);
+
+        $response = $this->actingAs($this->user)->put('/choices/restore/' . $this->choice->id );
+        $response->assertStatus(302);
+        $response->assertSessionHas('choice_restored');
+        $this->choice->refresh();
+
+        assertNull($this->choice->deleted_at);
+        assertTrue($this->choice->choice_position == 2);
+
+        $response = $this->actingAs($this->user)->put('/choices/moveup/' . $new_choice->id );
+        $response->assertStatus(302);
+        $new_choice->refresh();
+
+        assertTrue($new_choice->choice_position == 1);
+
+        $response = $this->actingAs($this->user)->put('/choices/moveup/' . $this->choice->id );
+        $response->assertStatus(302);
+        $this->choice->refresh();
+        $new_choice->refresh();
+
+        assertTrue($this->choice->choice_position == 1);
+        assertTrue($new_choice->choice_position == 2);
+
+        $response = $this->actingAs($this->user)->put('/choices/movedown/' . $new_choice->id );
+        $response->assertStatus(302);
+        $this->choice->refresh();
+        $new_choice->refresh();
+
+        assertTrue($this->choice->choice_position == 1);
+        assertTrue($new_choice->choice_position == 2);
+
+        $response = $this->actingAs($this->user)->put('/choices/movedown/' . $this->choice->id );
+        $response->assertStatus(302);
+        $this->choice->refresh();
+        $new_choice->refresh();
+
+        assertTrue($this->choice->choice_position == 2);
+        assertTrue($new_choice->choice_position == 1);
+    }
 
 }

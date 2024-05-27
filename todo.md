@@ -1,4 +1,4 @@
--   [1/2 ✓] backend tests!!!! -> controller endpointok
+-   [✓] backend tests!!!! -> controller endpointok
 -   [ ] Readme.md!!
 -   [ ] factroy 4 answers!!
 

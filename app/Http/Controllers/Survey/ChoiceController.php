@@ -172,7 +172,7 @@ class ChoiceController extends Controller
         $choice->choice_position = $question->choices()->count();
         $choice->save();
 
-        Session::flash('chioce_restored');
+        Session::flash('choice_restored');
 
         return redirect()->route('survey.question.index', ['survey' => $survey, 'question' => $question]);
     }

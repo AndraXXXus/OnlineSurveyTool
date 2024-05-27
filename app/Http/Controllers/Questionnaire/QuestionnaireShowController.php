@@ -25,9 +25,9 @@ class QuestionnaireShowController extends Controller
             return abort(419);
         }
 
-        $survey = Survey::whereNull('deleted_at')->whereNotNull('questionnaire_id')->where('questionnaire_id',$questionnaire_id)->first();
+        $survey = $questionnaire;
 
-        if($survey === null || $survey->questionnaire_id === null){
+        if($survey->questionnaire_id === null){
             return abort(419);
         }
 

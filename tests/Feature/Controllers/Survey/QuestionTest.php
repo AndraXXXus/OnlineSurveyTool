@@ -107,5 +107,5 @@ class QuestionTest extends TestCase
             ]);
         $response->assertStatus(404);
     }
-    
+
 }
