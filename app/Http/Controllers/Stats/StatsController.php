@@ -106,10 +106,15 @@ class StatsController extends Controller
             $question_id_X_answer_text[] = $question_id . " X " . $answer_text;
         }
         $question_id_X_answer_text = array_unique($question_id_X_answer_text);
-        $question_id_X_answer_text = array_combine(range(0, count($question_id_X_answer_text)-1), array_values($question_id_X_answer_text));
+        if(count($question_id_X_answer_text)>0){
+            $question_id_X_answer_text = array_combine(range(0, count($question_id_X_answer_text)-1), array_values($question_id_X_answer_text));
+        }
+
 
         $responderIds = $answers->pluck('responder_id')->unique()->toArray();
-        $responderIds = array_combine(range(0, count($responderIds)-1), array_values($responderIds));
+        if(count($responderIds)>0){
+            $responderIds = array_combine(range(0, count($responderIds)-1), array_values($responderIds));
+        }
 
         $matrix = [];
 
