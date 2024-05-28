@@ -13,7 +13,7 @@
     <hr>
 
     <div class="d-flex flex-wrap items-center  justify-content-center gap-2 p-3">
-
+            @if($answersCount->count()>0)
 
                 @include('stats.partials.charts.qfilledbarchart',
                 [
@@ -54,8 +54,9 @@
                     'id' =>'duration',
                     "title" => "Fill Duration distribution (in minutes)"
                 ])
-
-
+            @else
+                No responders yet!
+            @endif
     </div>
 
     <div class="d-flex flex-wrap items-center justify-content-center gap-2 p-3">
@@ -99,7 +100,7 @@
 
                     </div>
                 @empty
-                    No responders yet!
+                    Nothing to display
                 @endforelse
 
 
