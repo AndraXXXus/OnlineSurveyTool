@@ -31,7 +31,7 @@ class StatsController extends Controller
         ->groupBy('answers.question_id','questions.question_position')
         ->orderBy('questions.question_position', 'asc')
         ->get();
-        // dd($answersCount->pluck('responder_count'));
+
         $answerTextCountPerQuestion = Answer::where('answers.survey_id',$survey->id)
         ->join('questions', 'answers.question_id', '=', 'questions.id')
         ->select('answers.question_id', 'answers.answer_text','questions.question_position', DB::raw('COUNT(*) as count'))

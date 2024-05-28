@@ -10,4 +10,3 @@ call php artisan db:seed
 call php artisan route:clear && php artisan route:cache
 
 call php artisan storage:link
-
