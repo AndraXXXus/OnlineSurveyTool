@@ -6,10 +6,12 @@
 <div class="container">
 
     <h1 class="font-bold my-4 text-4xl text-center"> Stats </h1>
+    @if($answersCount->count()>0)
     <div class="d-flex flex-wrap items-center  justify-content-between gap-2 p-3">
         <a href="{{ route('stats.download_csv',  ['survey' => $survey]) }}" class="btn btn-primary"></i><i class="fa-solid fa-file-arrow-down"></i> Export as CSV </a>
         <a href="{{ route('stats.clustering',  ['survey' => $survey]) }}" class="btn btn-rebeccapurple">Clustering Answers</a>
     </div>
+    @endif
     <hr>
 
     <div class="d-flex flex-wrap items-center  justify-content-center gap-2 p-3">

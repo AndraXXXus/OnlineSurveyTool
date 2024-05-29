@@ -34,7 +34,7 @@ class QuestionnaireShowController extends Controller
         $question = $survey->questions()->orderBy('questions.question_position')->first();
 
         if($question === null){
-            return abort(419);
+            return abort(404,'No questions yet');
         }
 
         Session::put('responder_id', Uuid::uuid4());
