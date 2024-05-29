@@ -2,16 +2,16 @@
 -   [✓] backend tests!!!! -> controller endpointok
 -   [✓] Team softdelete
 -   [✓] Hierarchical
+-   [✓] no-js comptibilty 4 kitöltés
 -   [✓] profile: controller blade, pending, user details/password change, delete user
 -   [✓] Team: controller blade, kick, create new team, invite new team member, edit team name, team delete, give ownership of another member
 -   [✓] questionnaire gombok, forcedlete modal
 -   [✓] email new password!!!!!!!!!!, no email!
--   [✓] no-js comptibilty = no darkmode
 -   [✓] session lenght dia
 -   [✓] Stats
 -   [✓] youtube video valid validator server & client side
 -   [✓] video req, full watch, endable when video ended and chioce picked
--   [✓] questionnaire store!!!!!!
+-   [✓] questionnaire store!!!!!! + questionnaire mobile view
 -   [✓] stats szebb és nem tölt be a fő oszlopia
 -   [✓] disabled submit 4 questio requered!!!
 -   [✓] opens new window to fill out survey
@@ -52,8 +52,9 @@
 -   [ ] mass delete selected (arhcive, survey,question, choice, empty archive)
 -   [ ] dynamic serach in surveys/ questionnaires
 
+-   [-] no-js comptibilty = no darkmode
 -   [-] Broadcast events
--   [-] dia resposive & clikc-> zoom
+-   [-] dia resposive & click-> zoom
 -   [-] clone után boarder villog
 -   [-] report generálás
 -   [-] LiveWire
